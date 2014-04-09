@@ -1,0 +1,10 @@
+node_modules/
+.vagrant
+.idea
+*.iml
+docs
+test
+.travis.yml
+.jshintrc
+Gruntfile.*
+test/

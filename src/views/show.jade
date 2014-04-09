@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  #content #{body}
+
+  #last_edit
+    p Last edited <span class="date">#{ lastEdit.date }</span> by <span class="author">#{ lastEdit.author }</span> (<span class="commit">#{ lastEdit.commit }</span>)

@@ -1,0 +1,45 @@
+{
+  "name": "nodegitwiki",
+  "description": "Wiki powered by Node.js and Git",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ramesh Nair",
+    "email": "ram@hiddentao.com"
+  },
+  "dependencies": {
+    "waigo": "~0.6.8",
+    "co": "~3.0.5",
+    "bluebird": "~1.2.1",
+    "jade": "~1.3.1",
+    "markdown": "~0.5.0",
+    "commander": "~2.2.0",
+    "git-wrapper": "~0.1.1",
+    "moment": "~2.5.1"
+  },
+  "devDependencies": {
+    "time-grunt": "~0.2.3",
+    "grunt": "~0.4.2",
+    "load-grunt-tasks": "~0.2.0",
+    "grunt-contrib-jshint": "~0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hiddentao/nodegitwiki.git"
+  },
+  "main": "index",
+  "bin": {
+    "nodegitwiki": "./bin/nodegitwiki.js"
+  },
+  "scripts": {
+    "prepublish": "npm prune",
+    "build": "node --harmony `which grunt`",
+    "test": "NODE_ENVIRONMENT=test node --harmony `which grunt` test"
+  },
+  "engines": {
+    "node": ">=0.11.2"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/hiddentao/nodegitwiki/issues"
+  }
+}

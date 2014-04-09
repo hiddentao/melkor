@@ -1,0 +1,10 @@
+# node
+node_modules
+
+# IntelliJ
+.idea
+*.iml
+
+# VM
+Vagrantfile
+.vagrant
