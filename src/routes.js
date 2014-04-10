@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-  'GET /:page/edit': 'main.edit',
+  'GET /index': 'main.index',
   'GET /:page': 'main.show'
 };

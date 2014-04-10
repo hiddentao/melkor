@@ -58,3 +58,15 @@ footer {
   padding: 0.5em 1em;
   font-size: 80%;
 }
+
+/* site index */
+
+#wikiIndex {
+  .pageBody {
+    ul {
+      display: block;
+      list-style-type: none;
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+extends layout
+
+block content  
+  #wikiIndex
+    .pageHeader
+      h1 Wiki index
+
+    .pageBody
+      ul
+        - each page in pages
+          li
+            a(href="/" + page.name) #{page.name}
+

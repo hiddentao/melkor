@@ -22,16 +22,13 @@ exports.show = function*(next) {
 
 
 /** 
- * Show page editor.
+ * Show index of all pages.
  */
-exports.edit = function*(next) {
-  
+exports.index = function*(next) {
+  var pages = yield pageModel.index(this.app.config.wikiFolder);
+
+  yield this.render('index', {
+    pages: pages
+  });
 };
 
-
-/** 
- * Show page creator.
- */
-exports.new = function*(next) {
-
-};
