@@ -25,7 +25,7 @@ exports.show = function*(next) {
  * Show page editor.
  */
 exports.edit = function*(next) {
-
+  
 };
 
 

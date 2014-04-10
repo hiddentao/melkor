@@ -1,9 +1,45 @@
 extends layout
 
+mixin actionLink(anchorClass, link, icon, text)
+  a(type="button", class=anchorClass, href=link)
+    i(class="fa fa-" + icon)
+      span #{text}
+
+mixin editButton(anchorClass)
+  +actionLink(anchorClass, '/' + id + '/edit', 'edit', 'Edit')
+
+mixin renameButton(anchorClass)
+  +actionLink(anchorClass, '/' + id + '/rename', 'pencil', 'Rename')
+
+mixin deleteButton(anchorClass)
+  +actionLink(anchorClass, '/' + id + '/delete', 'trash-o', 'Delete')
+
+
 block content  
-  h1.pageTitle #{title}
+  .pageHeader
+    .actions
+      .visible-xs
+        .btn-group
+          button.btn.btn-default.dropdown-toggle(data-toggle="dropdown", type="button")
+            i.fa.fa-chevron-circle-down
+          ul.dropdown-menu.pull-right(role="menu")
+            li
+              +editButton()
+            li
+              +renameButton()
+            li
+              +deleteButton()
+      .hidden-xs
+        .btn-group
+          +editButton('btn btn-default')
+          +renameButton('btn btn-default')
+          +deleteButton('btn btn-default')
+
+    h1 #{title}
+
 
   .pageBody !{body}
+
 
   .lastEdit
     p Last edited <span class="author">!{ prettyPrintAuthor(lastEdit.author) }</span> <span class="date">!{ prettyPrintDate(lastEdit.date) }</span>

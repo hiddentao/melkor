@@ -25,8 +25,16 @@ main {
     border-bottom: 1px solid $gray-lighter;        
   }
 
-  h1.pageTitle {
-    margin-top: 0;
+  .pageHeader {
+    @include clearfix();
+    
+    .actions {
+      float: right;
+    }
+
+    h1 {
+      margin-top: 0;      
+    }
   }
 
   .lastEdit {
@@ -37,9 +45,7 @@ main {
     color: $gray-light;
 
     .author {
-      span {
-        font-weight: bold;
-      }
+      font-weight: bold;
     }
   }
 }

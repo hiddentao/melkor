@@ -48,6 +48,7 @@
           src: [
             '<%= config.bower %>/jquery/dist/jquery.js',
             '<%= config.bower %>/sass-bootstrap/js/transition.js',
+            '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
             '<%= config.bower %>/sass-bootstrap/js/collapse.js',
           ],
           dest: '<%= config.js %>/app.js'

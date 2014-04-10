@@ -21,7 +21,7 @@ module.exports = function*(app) {
      * @param {Date|String} date The date
      */
     prettyPrintDate: function(date) {
-      return '<span title="' + date + '">' + moment(date).from() + '</span>';
+      return '<abbr title="' + date + '">' + moment(date).from() + '</abbr>';
     },
 
     /** 
@@ -35,7 +35,7 @@ module.exports = function*(app) {
         if (0 < pos) {
           str = str.substr(0, pos).trim();
         }
-        return 'by <span title="' + author + '">' + str + '</span>';
+        return 'by <abbr title="' + author + '">' + str + '</abbr>';
       } else {
         return '';
       }

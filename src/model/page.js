@@ -40,6 +40,7 @@ exports.load = function*(wikiFolder, page) {
   let body = content.substr(matches[0].length).trim();
 
   return {
+    id: page,
     title: title,
     body: body,
     lastEdit: lastEdit
