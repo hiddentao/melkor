@@ -7,11 +7,13 @@ var dataFolder = process.cwd();
 
 commander
   .option('-p, --port <num>', 'Port number (Default: 4567)', 4567)
+  .option('-t, --title <title>', 'Wiki title (Default: Nodegitwiki)', 'Nodegitwiki')
   .parse(process.argv);
 
 var options = {
   baseURL: 'http://localhost:' + commander.port,
-  port: commander.port
+  port: commander.port,
+  title: commander.title
 };
 
 nodegitwiki.init(dataFolder, options, function(err) {

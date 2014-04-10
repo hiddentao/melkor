@@ -1,10 +1,5 @@
 # node
 node_modules
 
-# IntelliJ
-.idea
-*.iml
-
-# VM
-Vagrantfile
-.vagrant
+# source
+public/bower_components

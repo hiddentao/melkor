@@ -1,10 +1,9 @@
 node_modules/
-.vagrant
-.idea
-*.iml
-docs
-test
 .travis.yml
 .jshintrc
+.bowerrc
+bower.json
 Gruntfile.*
 test/
+public/bower_components
+public/sass

@@ -1,11 +1,10 @@
 'use strict';
 
 
-var waigo = require('waigo');
+var markdown = require('markdown').markdown, 
+  waigo = require('waigo');
 
 var pageModel = waigo.load('model/page');
-
-var wikiFolder = require('waigo').load('application').app.config.wikiFolder;
 
 
 /** 
@@ -14,7 +13,9 @@ var wikiFolder = require('waigo').load('application').app.config.wikiFolder;
 exports.show = function*(next) {
   var page = (this.params.page || 'home');
   
-  var data = yield pageModel.load(wikiFolder, page);
+  var data = yield pageModel.load(this.app.config.wikiFolder, page);
+
+  data.body = markdown.toHTML(data.body || '');
 
   yield this.render('show', data);
 };

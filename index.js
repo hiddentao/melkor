@@ -1,6 +1,7 @@
 'use strict';
 
-var Q = require('bluebird'),
+var debug = require('debug')('nodegitwiki'),
+  Q = require('bluebird'),
   path = require('path'),
   waigo = require('waigo');
 
@@ -16,6 +17,8 @@ var Q = require('bluebird'),
  * @return {Object} Nodegitwiki application object.
  */
 exports.init = function(folder, options, cb) {
+  debug('Wiki folder: ' + folder);
+
   if (2 === arguments.length) {
     cb = options;
     options = {};
@@ -30,10 +33,12 @@ exports.init = function(folder, options, cb) {
     
     yield* App.start({
       postConfig: function(config) {
-        for (let idx in options) {
-          config[idx] = options[idx];
-        }
+        config.startupSteps.unshift('wiki');
 
+        debug('Port: ' + config.port);
+        config.port = options.port;
+
+        config.wikiTitle = options.title;
         config.wikiFolder = folder;
       }
     });

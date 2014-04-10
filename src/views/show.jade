@@ -1,7 +1,9 @@
 extends layout
 
-block content
-  #content #{body}
+block content  
+  h1.pageTitle #{title}
 
-  #last_edit
-    p Last edited <span class="date">#{ lastEdit.date }</span> by <span class="author">#{ lastEdit.author }</span> (<span class="commit">#{ lastEdit.commit }</span>)
+  .pageBody !{body}
+
+  .lastEdit
+    p Last edited <span class="author">!{ prettyPrintAuthor(lastEdit.author) }</span> <span class="date">!{ prettyPrintDate(lastEdit.date) }</span>

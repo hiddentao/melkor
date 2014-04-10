@@ -1,0 +1,54 @@
+@import "_variables";
+@import "_bootstrap";
+@import "../bower_components/font-awesome/scss/font-awesome";
+
+
+a i span {
+  padding-left: 0.3em;
+}
+
+/* root elements */
+
+header:after {
+  display: block;
+  content: '';
+  height: 5em;
+}
+
+main {
+  display: block;
+  padding: 0.5em 2.5em;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0.8em 0;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid $gray-lighter;        
+  }
+
+  h1.pageTitle {
+    margin-top: 0;
+  }
+
+  .lastEdit {
+    font-size: 80%;
+    border-top: 1px solid $gray-lighter;
+    margin-top: 4em;
+    padding-top: 0.5em;
+    color: $gray-light;
+
+    .author {
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+footer {
+  display: block;
+  background-color: $navbar-inverse-bg;
+  color: $navbar-inverse-color;
+  margin-top: 2em;
+  padding: 0.5em 1em;
+  font-size: 80%;
+}
