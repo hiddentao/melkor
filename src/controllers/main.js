@@ -27,8 +27,21 @@ exports.show = function*(next) {
 exports.index = function*(next) {
   var pages = yield pageModel.index(this.app.config.wikiFolder);
 
+  var sortByModified = ('modified' === this.query.sort);
+
+  // newest first  
+  pages.sort(function(a, b) {
+    if (sortByModified) {
+      return a.time - b.time;         
+    } else {
+      return a.name > b.name;
+    }
+  });
+
+
   yield this.render('index', {
-    pages: pages
+    pages: pages,
+    sort: sortByModified ? 'modified' : 'name'
   });
 };
 

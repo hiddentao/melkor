@@ -78,11 +78,6 @@ exports.index = function*(wikiFolder) {
     };
   })
 
-  // newest first  
-  files.sort(function(a, b) {
-    return a.time - b.time;
-  });
-
   return files;
 };
 

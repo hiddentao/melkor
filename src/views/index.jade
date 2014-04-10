@@ -6,7 +6,16 @@ block content
       h1 Wiki index
 
     .pageBody
-      ul
+      div.sort Sort by:
+        ul.nav.nav-pills.sort
+          - liClass = ('name' === sort ? 'active' : '')
+          li(class=liClass)
+            a(href="/index") Name
+          - liClass = ('modified' === sort ? 'active' : '')
+          li(class=liClass)
+            a(href="/index?sort=modified") Last modified
+
+      ul.pages
         - each page in pages
           li
             a(href="/" + page.name) #{page.name}
