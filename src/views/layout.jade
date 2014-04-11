@@ -8,7 +8,7 @@ html
 
     // icons & favicons
     link(rel="shortcut icon", href="/img/favicon/logo_114x114.png")
-  
+
     //if IE
       link(rel="shortcut icon", href="img/favicon/logo_32x32.ico")
     // set for IE10 win
@@ -34,7 +34,7 @@ html
           ul.nav.navbar-nav.navbar-right
             - liClass = (nav === 'home' ? 'active' : '')
             li(class=liClass)
-              a(href="/") 
+              a(href="/")
                 i.fa.fa-home
                   span Home
             - liClass = (nav === 'index' ? 'active' : '')
@@ -42,11 +42,6 @@ html
               a(href="/index")
                 i.fa.fa-list
                   span Index
-            - liClass = (nav === 'new' ? 'active' : '')
-            li(class=liClass)
-              a(href="/new")
-                i.fa.fa-plus
-                  span New
 
     main
       .row
@@ -54,12 +49,8 @@ html
           block content
 
     footer
-      p Powered by <a href="https://github.com/hiddentao/nodegitwiki">nodegitwiki</a>
+      p Powered by <a href="https://github.com/hiddentao/melkor">melkor</a>
 
 
     script(type="text/javascript", src="/js/app.js")
     block scripts
-
-
-
-

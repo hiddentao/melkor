@@ -1,0 +1,36 @@
+extends layout
+
+mixin fieldError(fieldName)
+  if error && error.errors && error.errors[fieldName]
+    each err in error.errors[fieldName].errors
+      .alert.alert-danger #{err.msg}
+
+
+block content
+
+  #editor
+    .pageHeader
+      h1 Create new page
+
+    .pageBody
+      if error
+        .alert.alert-danger #{error.msg}
+      form(role="form", method="post")
+        .form-group
+          - var field = form.fields[0]
+          label(for="page_title") #{field.label}
+          input#page_title.form-control(name="title", type="text", placeholder="Page title...", value=field.value)
+          +fieldError(field.name)
+        .form-group
+          - var field = form.fields[1]
+          label(for="page_body") #{field.label}
+          textarea#page_body.form-control(name="body", placeholder="Page body...", rows="20", value=field.value)
+          +fieldError(field.name)
+        .well.comment
+          .form-group
+            - var field = form.fields[2]
+            label.sr-only(for="page_comment") #{field.label}
+            input#page_comment.form-control(name="comment", type="text", placeholder="Comment about this change (optional)", value=field.value)
+            span.help-block This will get entered as the Git commit message
+            +fieldError(field.name)
+        button.btn.btn-default(type="submit") Create

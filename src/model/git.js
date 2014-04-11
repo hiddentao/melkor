@@ -62,6 +62,9 @@ exports.getLastEdit = function*(repoFolder, fileName) {
   let repo = yield getRepo(repoFolder);
 
   let history = yield repo.execAsync('log', ['--', './' + fileName]);
+  if (!history) {
+    throw new Error('Error loading history for: ' + fileName);
+  }
 
   let commitId = history.match(/commit ([^\n]+)/im)[1];
   let authorId = history.match(/Author: ([^\n]+)/im)[1];
@@ -73,4 +76,3 @@ exports.getLastEdit = function*(repoFolder, fileName) {
     date: when
   };
 };
-

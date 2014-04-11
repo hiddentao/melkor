@@ -7,7 +7,7 @@ var dataFolder = process.cwd();
 
 commander
   .option('-p, --port <num>', 'Port number (Default: 4567)', 4567)
-  .option('-t, --title <title>', 'Wiki title (Default: Nodegitwiki)', 'Nodegitwiki')
+  .option('-t, --title <title>', 'Wiki title (Default: Wiki)', 'Wiki')
   .parse(process.argv);
 
 var options = {
@@ -22,5 +22,5 @@ nodegitwiki.init(dataFolder, options, function(err) {
     return;
   }
 
-  console.log('NodeGitWiki started in: ' + dataFolder);
+  console.log('Melkor started in: ' + dataFolder);
 });

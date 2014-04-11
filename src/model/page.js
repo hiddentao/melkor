@@ -4,6 +4,7 @@
 var fs = require('fs'),
   path = require('path'),
   Q = require('bluebird'),
+  util = require('util'),
   waigo = require('waigo');
 
 var git = waigo.load('model/git');
@@ -11,6 +12,13 @@ var git = waigo.load('model/git');
 
 Q.promisifyAll(fs);
 
+
+
+var PageNotFoundError = exports.PageNotFoundError = function(pageName) {
+  Error.call(this, 'Page not found: ' + pageName);
+  Error.captureStackTrace(this, PageNotFoundError);
+};
+util.inherits(PageNotFoundError, Error);
 
 
 
@@ -28,7 +36,7 @@ exports.load = function*(wikiFolder, page) {
   try {
     lastEdit = yield git.getLastEdit(wikiFolder, markdownFileName);
   } catch (err) {
-    throw new Error('Page not found: ' + page);
+    throw new PageNotFoundError(page);
   }
 
   let filePath = path.join( wikiFolder, markdownFileName );
@@ -48,7 +56,7 @@ exports.load = function*(wikiFolder, page) {
 };
 
 
-/** 
+/**
  * Get all wiki pages.
  * @param  {String} wikiFolder Data folder.
  * @return {Array} List of wiki pages sorted by modification date.
@@ -57,21 +65,21 @@ exports.index = function*(wikiFolder) {
   /*
   To keep things fast we won't bother checking to see if a given file is in the repository.
    */
-  
+
   // get all files
   var fileNames = yield fs.readdirAsync(wikiFolder);
 
   // get fs info for each wiki page
   var fileInfo = {};
   fileNames.forEach(function(name) {
-    if ('.md' === name.substr(-3)) {      
+    if ('.md' === name.substr(-3)) {
       fileInfo[name] = fs.statAsync(path.join(wikiFolder, name));
     }
   });
-  var fileInfo = yield fileInfo;
+  fileInfo = yield fileInfo;
 
   // construct info for each file
-  var files = Object.keys(fileInfo).map(function(name) {    
+  var files = Object.keys(fileInfo).map(function(name) {
     return {
       name: name.substr(0, name.length - 3),
       ts: fileInfo[name].mtime.getTime()
@@ -80,7 +88,3 @@ exports.index = function*(wikiFolder) {
 
   return files;
 };
-
-
-
-
