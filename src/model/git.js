@@ -2,22 +2,15 @@
 
 
 var debug = require('debug')('melkor-git'),
-  fs = require('fs'),
   Git = require('git-wrapper'),
   moment = require('moment'),
   path = require('path'),
-  tmp = require('tmp'),
   Q = require('bluebird');
 
+var fsUtils = require('./fsUtils'),
+  fs = fsUtils.fs,
+  tmp = fsUtils.tmp;
 
-Q.promisifyAll(fs);
-fs.existsAsync = Q.promisify(function(file, cb) {
-  fs.exists(file, function(exists) {
-    cb(null, exists);
-  });
-});
-
-Q.promisifyAll(tmp);
 
 
 
@@ -36,7 +29,7 @@ var repos = {};
  * @return {Object} Gift repo instance.
  */
 var getRepo = function*(folder) {
-  debug('Get repo in: ' + folder);
+  debug('Get repo: ' + folder);
 
   if (!repos[folder]) {
     let git = new Git({
@@ -47,7 +40,7 @@ var getRepo = function*(folder) {
 
     let exists = yield fs.existsAsync(path.join(folder, '.git'));
     if (!exists) {
-      debug('Initialising repo in: ' + folder);
+      debug('Initialising repo');
       yield git.execAsync('init');
     }
 
@@ -60,21 +53,27 @@ var getRepo = function*(folder) {
 
 
 /**
- * Add file to repository.
+ * Commit changes to file.
+ *
+ * The file will get added if to Git if necessary.
+ *
  * @param {String} folder The repo folder.
  * @param  {String} fileName   Name of file.
  * @param {String} commitMsg Commit msg.
  * @return {Object} Commit info.
  */
-exports.addFile = function*(folder, fileName, commitMsg) {
-  let repo = yield getRepo(folder);
+exports.commitFile = function*(folder, fileName, commitMsg) {
+  var repo = yield getRepo(folder);
 
-  debug('Add file to Git ' + fileName);
-  let history = yield repo.execAsync('add', [fileName]);
+  var fileTracked = yield exports.isFileInGit(repo, fileName);
+  if (!fileTracked) {
+    debug('Add file to Git: ' + fileName);
+    yield repo.execAsync('add', [fileName]);
+  }
 
   // write commit msg to file
   var tmpFile = (yield tmp.fileAsync())[0];
-  debug('Write commit msg to ' + tmpFile);
+  debug('Write commit msg to tmpfile');
   yield fs.writeFileAsync(tmpFile, commitMsg);
 
   debug('Commit');
@@ -83,6 +82,25 @@ exports.addFile = function*(folder, fileName, commitMsg) {
   return yield exports.getLastEdit(folder, fileName);
 };
 
+
+
+/**
+ * Get whether given file is Git tracked.
+ *
+ * @param  {Object} repo Repository object.
+ * @param  {String} fileName   Name of file.
+ * @return {Boolean}
+ */
+exports.isFileInGit = function*(repo, fileName) {
+  debug('Check if file is in git: ' + fileName);
+
+  try {
+    yield repo.execAsync('ls-files', ['--error-unmatch', fileName]);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 
 
 
@@ -95,13 +113,18 @@ exports.addFile = function*(folder, fileName, commitMsg) {
 exports.getLastEdit = function*(repoFolder, fileName) {
   let repo = yield getRepo(repoFolder);
 
+  var fileTracked = yield exports.isFileInGit(repo, fileName);
+  if (!fileTracked) {
+    throw new Error('Untracked file: ' + fileName);
+  }
+
   debug('Get history for: ' + fileName);
   let history = yield repo.execAsync('log', ['--', fileName]);
   if (!history) {
     throw new Error('Error loading history for: ' + fileName);
   }
 
-  debug('Parse history for last edit: ' + fileName);
+  debug('Parse history for last edit: '  + fileName);
   let commitId = history.match(/commit ([^\n]+)/im)[1];
   let authorId = history.match(/Author: ([^\n]+)/im)[1];
   let when = moment(history.match(/Date: ([^\n]+)/im)[1]).toDate();

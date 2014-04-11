@@ -1,7 +1,8 @@
 "use strict";
 
 
-var markdown = require('markdown').markdown,
+var debug = require('debug')('melkor-controller'),
+  markdown = require('markdown').markdown,
   waigo = require('waigo');
 
 var pageModel = waigo.load('model/page'),
@@ -14,6 +15,8 @@ var pageModel = waigo.load('model/page'),
  * Show editor to create a new page
  */
 exports.new = function*(next) {
+  debug('New page');
+
   var form = Form.new('page');
 
   form.fields.title.value = this.params.page;
@@ -31,6 +34,8 @@ exports.new = function*(next) {
  * Create new page.
  */
 exports.create = function*(next) {
+  debug('Create page');
+
   var form = Form.new('page');
 
   try {
@@ -39,13 +44,15 @@ exports.create = function*(next) {
 
     var title = form.fields.title.value;
 
-    var pageId = yield pageModel.create(
-        this.app.config.wikiFolder,
-        title,
-        form.fields.body.value,
-        form.fields.comment.value);
+    var pageSlug = yield pageModel.create(
+      this.app.config.wikiFolder,
+      title,
+      form.fields.body.value,
+      form.fields.comment.value
+    );
 
-    this.request.redirect('/' + pageId);
+    this.response.redirect('/' + pageSlug);
+
   } catch (err) {
     if (err instanceof FormValidationError) {
       this.status = err.status;
@@ -67,7 +74,9 @@ exports.create = function*(next) {
  * Show a page.
  */
 exports.show = function*(next) {
-  var page = (this.params.page || 'home');
+  debug('Show page');
+
+  var page = this.params.page || (this.params.page = 'home');
 
   var data = null;
   try {
@@ -94,6 +103,8 @@ exports.show = function*(next) {
  * Show index of all pages.
  */
 exports.index = function*(next) {
+  debug('Show index');
+
   var pages = yield pageModel.index(this.app.config.wikiFolder);
 
   var sortByModified = ('modified' === this.query.sort);

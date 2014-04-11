@@ -1,17 +1,18 @@
 'use strict';
 
 
-var fs = require('fs'),
+var debug = require('debug')('melkor-page'),
   path = require('path'),
   Q = require('bluebird'),
   slug = require('slug'),
   util = require('util'),
   waigo = require('waigo');
 
+var fsUtils = require('./fsUtils'),
+  fs = fsUtils.fs;
+
+
 var git = waigo.load('model/git');
-
-
-Q.promisifyAll(fs);
 
 
 
@@ -32,7 +33,7 @@ util.inherits(PageNotFoundError, Error);
 exports.load = function*(wikiFolder, page) {
   var markdownFileName = page + '.md';
 
-  // check that file is committed, etc
+  // check that file is committed and has a history
   var lastEdit = {};
   try {
     lastEdit = yield git.getLastEdit(wikiFolder, markdownFileName);
@@ -99,16 +100,16 @@ exports.index = function*(wikiFolder) {
  * @param  {String} title Page title.
  * @param  {String} body Page body content.
  * @param {String} [commitMsg] Commit msg.
- * @return {String} Page file name.
+ * @return {String} Page slug.
  */
 exports.create = function*(wikiFolder, title, body, commitMsg) {
   var slugName = slug(title);
 
   var fileName = path.join(wikiFolder, slugName + '.md');
 
-  yield fs.writeFileAsync(fileName, body);
+  yield fs.writeFileAsync(fileName, '# ' + title + "\n" + body);
 
-  yield git.addFile(wikiFolder, fileName, commitMsg || 'New page: ' + title);
+  yield git.commitFile(wikiFolder, fileName, commitMsg || 'New page: ' + title);
 
   return slugName;
 };
