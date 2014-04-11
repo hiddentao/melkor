@@ -6,4 +6,5 @@ bower.json
 Gruntfile.*
 test/
 public/bower_components
-public/sass
+public/src/sass
+public/src/js

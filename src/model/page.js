@@ -27,18 +27,18 @@ util.inherits(PageNotFoundError, Error);
 /**
  * Load a wiki page.
  * @param  {String} wikiFolder Data folder.
- * @param  {String} page Page name.
+ * @param  {String} page Page slug.
  * @return {Object} Page content and meta information.
  */
-exports.load = function*(wikiFolder, page) {
-  var markdownFileName = page + '.md';
+exports.load = function*(wikiFolder, pageSlug) {
+  var markdownFileName = pageSlug + '.md';
 
   // check that file is committed and has a history
   var lastEdit = {};
   try {
     lastEdit = yield git.getLastEdit(wikiFolder, markdownFileName);
   } catch (err) {
-    throw new PageNotFoundError(page);
+    throw new PageNotFoundError(pageSlug);
   }
 
   let filePath = path.join( wikiFolder, markdownFileName );
@@ -50,7 +50,7 @@ exports.load = function*(wikiFolder, page) {
   let body = content.substr(matches[0].length).trim();
 
   return {
-    id: page,
+    slug: pageSlug,
     title: title,
     body: body,
     lastEdit: lastEdit
@@ -112,4 +112,18 @@ exports.create = function*(wikiFolder, title, body, commitMsg) {
   yield git.commitFile(wikiFolder, fileName, commitMsg || 'New page: ' + title);
 
   return slugName;
+};
+
+
+
+/**
+ * Delete a page.
+ *
+ * @param  {String} wikiFolder Data folder.
+ * @param  {String} pageSlug Page slug.
+ */
+exports.delete = function*(wikiFolder, pageSlug) {
+  var fileName = path.join(wikiFolder, pageSlug + '.md');
+
+  yield git.removeFile(wikiFolder, fileName);
 };

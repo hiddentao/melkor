@@ -71,6 +71,23 @@ exports.create = function*(next) {
 
 
 /**
+ * Delete a page.
+ */
+exports.delete = function*(next) {
+  debug('Delete page');
+
+  var page = this.params.page;
+
+  yield pageModel.delete(this.app.config.wikiFolder, this.params.page);
+
+  this.response.redirect('/');
+};
+
+
+
+
+
+/**
  * Show a page.
  */
 exports.show = function*(next) {

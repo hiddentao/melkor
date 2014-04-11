@@ -9,14 +9,19 @@
       config: {
         backend: 'src',
         bower: 'public/bower_components',
-        js: 'public/js',
-        css: 'public/css',
-        fonts: 'public/fonts',
-        sass: 'public/sass'
+        src: {
+          sass: 'public/src/sass',
+          js: 'public/src/js'
+        },
+        build: {
+          js: 'public/build/js',
+          css: 'public/build/css',
+          fonts: 'public/build/fonts',
+        }
       },
       watch: {
         sass: {
-          files: ['<%= config.sass %>/{,*/}{,*/}*.scss'],
+          files: ['<%= config.src.sass %>/{,*/}{,*/}*.scss'],
           tasks: ['sass']
         }
       },
@@ -36,7 +41,7 @@
             outputStyle: 'compressed'
           },
           files: {
-            '<%= config.css %>/style.css': '<%= config.sass %>/style.scss'
+            '<%= config.build.css %>/style.css': '<%= config.src.sass %>/style.scss'
           }
         }
       },
@@ -50,15 +55,16 @@
             '<%= config.bower %>/sass-bootstrap/js/transition.js',
             '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
             '<%= config.bower %>/sass-bootstrap/js/collapse.js',
+            '<%= config.src.js %>/app.js',
           ],
-          dest: '<%= config.js %>/app.js'
+          dest: '<%= config.build.js %>/app.js'
         }
       },
      uglify: {
         js: {
           files: {
-            '<%= config.js %>/app.js': [
-              '<%= config.js %>/app.js'
+            '<%= config.build.js %>/app.js': [
+              '<%= config.build.js %>/app.js'
             ]
           }
         }
@@ -71,7 +77,7 @@
               expand: true,
               flatten: true,
               src: '<%= config.bower %>/font-awesome/fonts/*',
-              dest: '<%= config.fonts %>/',
+              dest: '<%= config.build.fonts %>/',
               filter: 'isFile'
             }
           ]
@@ -94,6 +100,3 @@
   };
 
 })();
-
-
-

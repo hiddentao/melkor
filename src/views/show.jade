@@ -1,21 +1,18 @@
 extends layout
 
-mixin actionLink(anchorClass, link, icon, text)
-  a(type="button", class=anchorClass, href=link)
+mixin actionLink(anchorClass, role, link, icon, text, onclick)
+  a(type="button", role=role, class=anchorClass, href=link)
     i(class="fa fa-" + icon)
       span #{text}
 
 mixin editButton(anchorClass)
-  +actionLink(anchorClass, '/' + id + '/edit', 'edit', 'Edit')
-
-mixin renameButton(anchorClass)
-  +actionLink(anchorClass, '/' + id + '/rename', 'pencil', 'Rename')
+  +actionLink(anchorClass, 'edit', '/' + slug + '/edit', 'edit', 'Edit')
 
 mixin deleteButton(anchorClass)
-  +actionLink(anchorClass, '/' + id + '/delete', 'trash-o', 'Delete')
+  +actionLink(anchorClass, 'delete', '/' + slug + '/delete', 'trash-o', 'Delete')
 
 
-block content  
+block content
   .pageHeader
     .actions
       .visible-xs
@@ -26,13 +23,10 @@ block content
             li
               +editButton()
             li
-              +renameButton()
-            li
               +deleteButton()
       .hidden-xs
         .btn-group
           +editButton('btn btn-default')
-          +renameButton('btn btn-default')
           +deleteButton('btn btn-default')
 
     h1 #{title}

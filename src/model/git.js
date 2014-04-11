@@ -60,7 +60,6 @@ var getRepo = function*(folder) {
  * @param {String} folder The repo folder.
  * @param  {String} fileName   Name of file.
  * @param {String} commitMsg Commit msg.
- * @return {Object} Commit info.
  */
 exports.commitFile = function*(folder, fileName, commitMsg) {
   var repo = yield getRepo(folder);
@@ -78,9 +77,40 @@ exports.commitFile = function*(folder, fileName, commitMsg) {
 
   debug('Commit');
   yield repo.execAsync('commit', ['-F', tmpFile]);
-
-  return yield exports.getLastEdit(folder, fileName);
 };
+
+
+
+
+/**
+ * Remove file.
+ *
+ * @param {String} folder The repo folder.
+ * @param  {String} fileName   Name of file.
+ */
+exports.removeFile = function*(folder, fileName) {
+  debug('Remove file: ' + fileName);
+
+  var repo = yield getRepo(folder);
+
+  var fileTracked = yield exports.isFileInGit(repo, fileName);
+  if (!fileTracked) {
+    throw new Error('Untracked file: ' + fileName);
+  }
+
+  // remove file
+  yield repo.execAsync('rm', [fileName]);
+
+  // commit
+  var tmpFile = (yield tmp.fileAsync())[0];
+  debug('Write commit msg to tmpfile');
+  yield fs.writeFileAsync(tmpFile, 'Remove page: ' + fileName);
+
+  debug('Commit');
+  yield repo.execAsync('commit', ['-F', tmpFile]);
+};
+
+
 
 
 
