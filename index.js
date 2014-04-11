@@ -1,20 +1,20 @@
 'use strict';
 
-var debug = require('debug')('nodegitwiki'),
+var debug = require('debug')('melkor'),
   Q = require('bluebird'),
   path = require('path'),
   waigo = require('waigo');
 
 
 /**
- * Initialise nodegitwiki.
+ * Initialise melkor.
  * 
  * @param {String} folder Path to data folder.
  * @param {Object} [options] Additional options.
  * @param {Number} [options.port] Port to listen on.
  * @param {Function} cb Callback.
  *
- * @return {Object} Nodegitwiki application object.
+ * @return {Object} melkor application object.
  */
 exports.init = function(folder, options, cb) {
   debug('Wiki folder: ' + folder);

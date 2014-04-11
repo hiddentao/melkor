@@ -1,5 +1,5 @@
 {
-  "name": "nodegitwiki",
+  "name": "melkor",
   "description": "Wiki powered by Node.js and Git",
   "version": "1.0.0",
   "author": {
@@ -18,7 +18,9 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-watch": "~0.6.1",
-    "debug": "~0.8.0"
+    "debug": "~0.8.0",
+    "slug": "~0.4.2",
+    "tmp": "0.0.23"
   },
   "devDependencies": {
     "time-grunt": "~0.2.3",
@@ -31,11 +33,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hiddentao/nodegitwiki.git"
+    "url": "git://github.com/hiddentao/melkor.git"
   },
   "main": "index",
   "bin": {
-    "nodegitwiki": "./bin/nodegitwiki.js"
+    "melkor": "./bin/melkor.js"
   },
   "scripts": {
     "prepublish": "npm prune",
@@ -47,6 +49,6 @@
   },
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/hiddentao/nodegitwiki/issues"
+    "url": "https://github.com/hiddentao/melkor/issues"
   }
 }

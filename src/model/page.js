@@ -4,6 +4,7 @@
 var fs = require('fs'),
   path = require('path'),
   Q = require('bluebird'),
+  slug = require('slug'),
   util = require('util'),
   waigo = require('waigo');
 
@@ -87,4 +88,27 @@ exports.index = function*(wikiFolder) {
   })
 
   return files;
+};
+
+
+
+/**
+ * Create a page.
+ *
+ * @param  {String} wikiFolder Data folder.
+ * @param  {String} title Page title.
+ * @param  {String} body Page body content.
+ * @param {String} [commitMsg] Commit msg.
+ * @return {String} Page file name.
+ */
+exports.create = function*(wikiFolder, title, body, commitMsg) {
+  var slugName = slug(title);
+
+  var fileName = path.join(wikiFolder, slugName + '.md');
+
+  yield fs.writeFileAsync(fileName, body);
+
+  yield git.addFile(wikiFolder, fileName, commitMsg || 'New page: ' + title);
+
+  return slugName;
 };

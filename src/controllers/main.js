@@ -39,12 +39,17 @@ exports.create = function*(next) {
 
     var title = form.fields.title.value;
 
-    console.log(title);
+    var pageId = yield pageModel.create(
+        this.app.config.wikiFolder,
+        title,
+        form.fields.body.value,
+        form.fields.comment.value);
 
+    this.request.redirect('/' + pageId);
   } catch (err) {
-    this.status = err.status;
-
     if (err instanceof FormValidationError) {
+      this.status = err.status;
+
       yield this.render('new', {
         form: form,
         error: err

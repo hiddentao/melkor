@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('nodegitwiki-startup'),
+var debug = require('debug')('melkor-startup'),
   moment = require('moment');
 
 

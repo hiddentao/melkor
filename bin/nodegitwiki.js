@@ -1,6 +1,6 @@
 #!/usr/bin/env node --harmony
 var commander = require('commander'),
-  nodegitwiki = require('../index');
+  melkor = require('../index');
 
 var dataFolder = process.cwd();
 
@@ -16,7 +16,7 @@ var options = {
   title: commander.title
 };
 
-nodegitwiki.init(dataFolder, options, function(err) {
+melkor.init(dataFolder, options, function(err) {
   if (err) {
     console.error(err.stack);
     return;
