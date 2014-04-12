@@ -28,8 +28,6 @@ exports.new = function*(next) {
 
 
 
-
-
 /**
  * Create new page.
  */
@@ -44,11 +42,14 @@ exports.create = function*(next) {
 
     var title = form.fields.title.value;
 
-    var pageSlug = yield pageModel.create(
+    var pageSlug = yield pageModel.save(
       this.app.config.wikiFolder,
-      title,
-      form.fields.body.value,
-      form.fields.comment.value
+      null,
+      {
+        title: form.fields.title.value,
+        body: form.fields.body.value,
+        commitMsg: form.fields.comment.value
+      }
     );
 
     this.response.redirect('/' + pageSlug);
@@ -66,6 +67,67 @@ exports.create = function*(next) {
     }
   }
 };
+
+
+
+/**
+ * Show page editor
+ */
+exports.edit = function*(next) {
+  debug('Edit page');
+
+  var pageData = yield pageModel.load(this.app.config.wikiFolder, this.params.page);
+
+  var form = Form.new('page');
+  form.fields.title.value = pageData.title;
+  form.fields.body.value = pageData.body;
+
+  yield this.render('edit', {
+    form: form
+  });
+};
+
+
+
+
+/**
+ * Update page
+ */
+exports.update = function*(next) {
+  debug('Update page');
+
+  var form = Form.new('page');
+
+  try {
+    yield form.setValues(this.request.body);
+    yield form.validate();
+
+    var pageSlug = yield pageModel.save(
+      this.app.config.wikiFolder,
+      this.params.page,
+      {
+        title: form.fields.title.value,
+        body: form.fields.body.value,
+        commitMsg: form.fields.comment.value
+      }
+    );
+
+    this.response.redirect('/' + pageSlug);
+
+  } catch (err) {
+    if (err instanceof FormValidationError) {
+      this.status = err.status;
+
+      yield this.render('edit', {
+        form: form,
+        error: err
+      });
+    } else {
+      throw err;
+    }
+  }
+};
+
 
 
 

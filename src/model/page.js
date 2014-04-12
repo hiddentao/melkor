@@ -94,25 +94,39 @@ exports.index = function*(wikiFolder) {
 
 
 /**
- * Create a page.
+ * Save a page.
  *
  * @param  {String} wikiFolder Data folder.
- * @param  {String} title Page title.
- * @param  {String} body Page body content.
- * @param {String} [commitMsg] Commit msg.
+ * @param  {String} pageSlug Current page slug name.
+ * @param  {Object} data New data.
+ * @param  {String} data.title New page title.
+ * @param  {String} body New page content.
+ * @param  {String} [commitMsg] Commit message.
  * @return {String} Page slug.
  */
-exports.create = function*(wikiFolder, title, body, commitMsg) {
-  var slugName = slug(title);
+exports.save = function*(wikiFolder, pageSlug, data) {
+  if (!data.commitMsg) {
+    data.commitMsg = pageSlug ? 'Update page' : 'Create page';
+  }
 
-  var fileName = path.join(wikiFolder, slugName + '.md');
+  var newSlugName = slug(data.title),
+    newFileName = newSlugName + '.md';
 
-  yield fs.writeFileAsync(fileName, '# ' + title + "\n" + body);
+  yield fs.writeFileAsync(
+    path.join(wikiFolder, newFileName),
+    '# ' + data.title + "\n" + data.body
+  );
 
-  yield git.commitFile(wikiFolder, fileName, commitMsg || 'New page: ' + title);
+  yield git.commitFile(wikiFolder,
+    (pageSlug && pageSlug + '.md') || null,
+    newFileName,
+    data.commitMsg
+  );
 
-  return slugName;
+  return newSlugName;
 };
+
+
 
 
 

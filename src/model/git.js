@@ -52,23 +52,51 @@ var getRepo = function*(folder) {
 
 
 
+
+
+
 /**
- * Commit changes to file.
+ * Get whether given file is Git tracked.
+ *
+ * @param  {Object} repo Repository object.
+ * @param  {String} fileName   Name of file.
+ * @return {Boolean}
+ */
+exports.isFileInGit = function*(repo, fileName) {
+  debug('Check if file is in git: ' + fileName);
+
+  try {
+    yield repo.execAsync('ls-files', ['--error-unmatch', fileName]);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+
+
+
+
+/**
+ * Commit changes to file, including renames.
  *
  * The file will get added if to Git if necessary.
  *
  * @param {String} folder The repo folder.
- * @param  {String} fileName   Name of file.
+ * @param {String} oldFileName Old name of file.
+ * @param {String} newFileName New name of file.
  * @param {String} commitMsg Commit msg.
  */
-exports.commitFile = function*(folder, fileName, commitMsg) {
+exports.commitFile = function*(folder, oldFileName, newFileName, commitMsg) {
   var repo = yield getRepo(folder);
 
-  var fileTracked = yield exports.isFileInGit(repo, fileName);
-  if (!fileTracked) {
-    debug('Add file to Git: ' + fileName);
-    yield repo.execAsync('add', [fileName]);
+  if (oldFileName && newFileName !== oldFileName) {
+    debug('Remove old file: ' + oldFileName);
+    yield repo.execAsync('rm', [oldFileName]);
   }
+
+  debug('Add new changes: ' + newFileName);
+  yield repo.execAsync('add', [newFileName]);
 
   // write commit msg to file
   var tmpFile = (yield tmp.fileAsync())[0];
@@ -110,27 +138,6 @@ exports.removeFile = function*(folder, fileName) {
   yield repo.execAsync('commit', ['-F', tmpFile]);
 };
 
-
-
-
-
-/**
- * Get whether given file is Git tracked.
- *
- * @param  {Object} repo Repository object.
- * @param  {String} fileName   Name of file.
- * @return {Boolean}
- */
-exports.isFileInGit = function*(repo, fileName) {
-  debug('Check if file is in git: ' + fileName);
-
-  try {
-    yield repo.execAsync('ls-files', ['--error-unmatch', fileName]);
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
 
 
 
