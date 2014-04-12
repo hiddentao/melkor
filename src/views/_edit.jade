@@ -20,6 +20,7 @@ block content
           - var field = form.fields[0]
           label(for="page_title") #{field.label}
           input#page_title.form-control(name="title", type="text", placeholder="Page title...", value=field.value)
+          span.help-block #{titleHelp}
           +fieldError(field.name)
         .form-group
           - var field = form.fields[1]
