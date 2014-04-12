@@ -24,7 +24,7 @@ block content
           +fieldError(field.name)
         .form-group
           - var field = form.fields[1]
-          label(for="page_body") #{field.label}
+          label(for="page_body") #{field.label} (markdown)
           textarea#page_body.form-control(name="body", placeholder="Page body...", rows="20") #{field.value}
           +fieldError(field.name)
         .well.comment

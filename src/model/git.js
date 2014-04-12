@@ -98,6 +98,13 @@ exports.commitFile = function*(folder, oldFileName, newFileName, commitMsg) {
   debug('Add new changes: ' + newFileName);
   yield repo.execAsync('add', [newFileName]);
 
+  // check if there is stuff to do
+  var status = yield repo.execAsync('status', []);
+  if (0 <= status.indexOf('nothing to commit')) {
+    debug('No changes to be committed');
+    return;
+  }
+
   // write commit msg to file
   var tmpFile = (yield tmp.fileAsync())[0];
   debug('Write commit msg to tmpfile');
