@@ -40,7 +40,9 @@ Command-line options:
 ## Development
 
     $ npm install -g grunt-cli
+    $ npm install -g bower
     $ npm install
+    $ bower install
     $ npm run build <-- this will build the code and run the tests
 
 ## Why _Melkor_?
