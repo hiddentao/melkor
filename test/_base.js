@@ -12,12 +12,12 @@ exports.wikiFolder = path.join(__dirname, 'testWiki');
 
 
 exports.createWikiFolder = function() {
-  // return Q.promisify(tmp.dir)();
-  return new Q(function(resolve) {
-    shell.rm('-rf', '/tmp/test');
-    shell.mkdir('/tmp/test');
-    resolve('/tmp/test');
-  });
+  return Q.promisify(tmp.dir)();
+  // return new Q(function(resolve) {
+  //   shell.rm('-rf', '/tmp/test');
+  //   shell.mkdir('/tmp/test');
+  //   resolve('/tmp/test');
+  // });
 };
 
 

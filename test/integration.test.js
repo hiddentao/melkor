@@ -1,5 +1,7 @@
 var chai = require('chai'),
   cheerio = require('cheerio'),
+  co = require('co'),
+  markdown = require('markdown').markdown;
   melkor = require('../'),
   path = require('path'),
   Q = require('bluebird'),
@@ -12,12 +14,15 @@ var assert = chai.assert,
 
 var testBase = require('./_base');
 
+var fs = require('../src/support/fsUtils').fs;
+
+
 
 var test = module.exports = {
   beforeEach: function(done) {
     var self = this;
 
-    Q.coroutine(function*() {
+    co(function*() {
       self.wikiFolder = yield testBase.createWikiFolder();
 
       self.app = yield* melkor.init(self.wikiFolder, {
@@ -26,17 +31,41 @@ var test = module.exports = {
 
       self.req = request('http://localhost:54567');
 
-    })().nodeify(done);
+    })(done);
   },
   afterEach: function(done) {
     var self = this;
 
-    Q.coroutine(function*() {
+    co(function*() {
       yield* self.app.shutdown();
-    })().nodeify(done);
+    })(done);
   }
 };
 
+
+
+test['home'] = {
+  'homepage gets created at startup': function(done) {
+    var self = this;
+
+    fs.readFileAsync(path.join(__dirname, '..', 'data', 'home.md'), 'utf-8')
+      .then(function(defaultHomeMarkdown) {
+        var html = markdown.toHTML(defaultHomeMarkdown);
+
+        return self.req
+          .get('/')
+          .expect(200)
+          .expect(function(res) {
+            var $ = cheerio.load(res.text);
+
+            $('title').text().should.eql('Home');
+            $('.pageBody').html().should.eql(html);
+          })
+          .endP();
+      })
+      .nodeify(done);
+  }
+}
 
 
 test['create'] = {
@@ -220,7 +249,7 @@ test['index'] = {
             anchorLI.attr('class').should.eql('active');
 
             var pageLinks = $('.pages a');
-            pageLinks.text().should.eql('blah1blah2blah3');
+            pageLinks.text().should.eql('blah1blah2blah3home');
           })
           .endP();
       })
@@ -250,7 +279,7 @@ test['index'] = {
             anchorLI.attr('class').should.eql('active');
 
             var pageLinks = $('.pages a');
-            pageLinks.text().should.eql('blah2blah3blah1');
+            pageLinks.text().should.eql('blah2blah3blah1home');
           })
           .endP();
       })

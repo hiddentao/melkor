@@ -1,6 +1,6 @@
 {
   "name": "melkor",
-  "description": "Wiki powered by Node.js and Git",
+  "description": "Simple, fast wiki powered by Node.js and Git",
   "version": "1.0.0",
   "author": {
     "name": "Ramesh Nair",

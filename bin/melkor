@@ -1,7 +1,7 @@
 #!/usr/bin/env node --harmony
 var commander = require('commander'),
   melkor = require('../index'),
-  Q = require('bluebird');
+  co = require('co');
 
 var dataFolder = process.cwd();
 
@@ -18,8 +18,10 @@ var options = {
 };
 
 
-Q.coroutine(melkor.init)(dataFolder, options)
-  .then(function() {
-    console.log('Melkor (PID: ' + process.pid + ') started in: ' + dataFolder);
-  })
-  .catch(console.error);
+co(melkor.init)(dataFolder, options, function(err) {
+  if (err) {
+    return console.error(err.stack);
+  }
+
+  console.log('Melkor (PID: ' + process.pid + ') started in: ' + dataFolder);
+});

@@ -14,10 +14,12 @@ A simple, fast wiki powered by Node.js and Git.
 
 Melkor uses generators - **Node v0.11.2+ is required.**
 
-  $ npm install -g melkor
-  $ mkdir mywikifolder
-  $ cd mywikifolder
-  $ melkor
+```bash
+$ npm install -g melkor
+$ mkdir mywikifolder
+$ cd mywikifolder
+$ melkor
+```
 
 Browse to http://localhost:4567 to start using the wiki.
 
