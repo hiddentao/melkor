@@ -10,7 +10,7 @@ A simple, fast wiki powered by Node.js and Git.
 * [Markdown](https://github.com/evilstreak/markdown-js) syntax
 * [Responsive](http://getbootstrap.com) layout (small-screen editing)
 
-
+[![Screenshot](https://raw.githubusercontent.com/hiddentao/melkor/master/screenshots/mobile.png)](https://github.com/hiddentao/melkor/tree/master/screenshots)
 
 ## Usage
 
