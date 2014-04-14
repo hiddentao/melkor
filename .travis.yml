@@ -12,9 +12,8 @@ before_script:
   - "npm install"
 
 script:
-  - "NODE_ENV=test node --harmony `which grunt`"
+  - "npm run build"
 
 notifications:
   email:
     - ram@hiddentao.com
-
