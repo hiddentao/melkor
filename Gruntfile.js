@@ -8,6 +8,7 @@
     grunt.initConfig({
       config: {
         backend: 'src',
+        test: 'test',
         bower: 'public/bower_components',
         src: {
           sass: 'public/src/sass',
@@ -82,6 +83,17 @@
             }
           ]
         }
+      },
+      mochaTest: {
+        test: {
+          options: {
+            ui: 'exports',
+            reporter: 'spec'
+          },
+          src: [
+            '<%= config.test %>/*.test.js'
+          ]
+        }
       }
     });
 
@@ -92,7 +104,8 @@
       'sass',
       'copy',
       'concat',
-      'uglify'
+      'uglify',
+      'mochaTest'
     ]);
 
     grunt.registerTask('default', [ 'build' ]);

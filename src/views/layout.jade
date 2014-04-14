@@ -42,6 +42,11 @@ html
               a(href="/index")
                 i.fa.fa-list
                   span Index
+            - liClass = (nav === 'new' ? 'active' : '')
+            li(class=liClass)
+              a(href="/new")
+                i.fa.fa-plus
+                  span New
 
     main
       .row

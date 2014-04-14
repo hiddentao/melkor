@@ -4,11 +4,11 @@
 var debug = require('debug')('melkor-page'),
   path = require('path'),
   Q = require('bluebird'),
-  slug = require('slug'),
+  slugify = require('slug'),
   util = require('util'),
   waigo = require('waigo');
 
-var fsUtils = require('./fsUtils'),
+var fsUtils = waigo.load('support/fsUtils'),
   fs = fsUtils.fs;
 
 
@@ -109,7 +109,7 @@ exports.save = function*(wikiFolder, pageSlug, data) {
     data.commitMsg = pageSlug ? 'Update page' : 'Create page';
   }
 
-  var newSlugName = slug(data.title),
+  var newSlugName = yield exports.convertToSlug(wikiFolder, data.title),
     newFileName = newSlugName + '.md';
 
   yield fs.writeFileAsync(
@@ -140,4 +140,38 @@ exports.delete = function*(wikiFolder, pageSlug) {
   var fileName = path.join(wikiFolder, pageSlug + '.md');
 
   yield git.removeFile(wikiFolder, fileName);
+};
+
+
+
+
+/**
+ * Convert given page title to a URL slug.
+ *
+ * Since the slug also doubles as the filename this does some work to ensure
+ * that there will be no filename clashes.
+ *
+ * @param  {String} wikiFolder Data folder.
+ * @param {String} pageTitle Page title.
+ * @return {String}
+ */
+exports.convertToSlug = function*(wikiFolder, pageTitle) {
+  var slug = slugify(pageTitle).toLowerCase();
+  // if slugify can't handle it then URL encode
+  if ('' === slug) {
+    slug = encodeURIComponent(pageTitle);
+  }
+
+  // if matches reserved wiki page slugs then modify slightly
+  if ('index' === slug || 'new' === slug) {
+    slug += '-';
+  }
+
+  // iterate until no existing file matches this name
+  var filePath = path.join( wikiFolder, slug );
+  while (yield fs.existsAsync(filePath + '.md')) {
+    filePath = path.join( wikiFolder, slug + '-' );
+  }
+
+  return slug;
 };

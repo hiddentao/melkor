@@ -19,9 +19,12 @@ exports.new = function*(next) {
 
   var form = Form.new('page');
 
-  form.fields.title.value = this.params.page;
+  if ('new' !== this.params.page) {
+    form.fields.title.value = this.params.page;
+  }
 
   yield this.render('new', {
+    nav: 'new',
     form: form
   });
 };
@@ -59,6 +62,7 @@ exports.create = function*(next) {
       this.status = err.status;
 
       yield this.render('new', {
+        nav: 'new',
         form: form,
         error: err
       });
@@ -171,6 +175,8 @@ exports.show = function*(next) {
 
   data.body = markdown.toHTML(data.body || '');
 
+  data.nav = page;
+
   yield this.render('show', data);
 };
 
@@ -199,6 +205,7 @@ exports.index = function*(next) {
 
 
   yield this.render('index', {
+    nav: 'index',
     pages: pages,
     sort: sortByModified ? 'modified' : 'name'
   });

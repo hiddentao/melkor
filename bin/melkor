@@ -1,0 +1,25 @@
+#!/usr/bin/env node --harmony
+var commander = require('commander'),
+  melkor = require('../index'),
+  Q = require('bluebird');
+
+var dataFolder = process.cwd();
+
+
+commander
+  .option('-p, --port <num>', 'Port number (Default: 4567)', 4567)
+  .option('-t, --title <title>', 'Wiki title (Default: Wiki)', 'Wiki')
+  .parse(process.argv);
+
+var options = {
+  baseURL: 'http://localhost:' + commander.port,
+  port: commander.port,
+  title: commander.title
+};
+
+
+Q.coroutine(melkor.init)(dataFolder, options)
+  .then(function() {
+    console.log('Melkor (PID: ' + process.pid + ') started in: ' + dataFolder);
+  })
+  .catch(console.error);

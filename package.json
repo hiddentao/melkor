@@ -10,14 +10,9 @@
     "waigo": "~1.0.0",
     "co": "~3.0.5",
     "bluebird": "~1.2.1",
-    "jade": "~1.3.1",
     "markdown": "~0.5.0",
     "commander": "~2.2.0",
-    "git-wrapper": "~0.1.1",
     "moment": "~2.5.1",
-    "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-watch": "~0.6.1",
     "debug": "~0.8.0",
     "slug": "~0.4.2",
     "tmp": "0.0.23"
@@ -27,9 +22,18 @@
     "grunt": "~0.4.2",
     "load-grunt-tasks": "~0.2.0",
     "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "~0.6.1",
     "grunt-sass": "~0.12.1",
     "grunt-contrib-concat": "~0.4.0",
-    "grunt-contrib-uglify": "~0.4.0"
+    "grunt-contrib-uglify": "~0.4.0",
+    "shelljs": "~0.2.6",
+    "chai": "~1.9.1",
+    "grunt-mocha-test": "~0.10.2",
+    "supertest": "~0.10.0",
+    "lodash": "~2.4.1",
+    "cheerio": "~0.15.0"
   },
   "repository": {
     "type": "git",
@@ -37,12 +41,12 @@
   },
   "main": "index",
   "bin": {
-    "melkor": "./bin/melkor.js"
+    "melkor": "./bin/melkor"
   },
   "scripts": {
-    "prepublish": "npm prune",
+    "prepublish": "npm prune && npm build",
     "build": "node --harmony `which grunt`",
-    "test": "NODE_ENVIRONMENT=test node --harmony `which grunt` test"
+    "test": "NODE_ENVIRONMENT=test node --harmony `which grunt` mochaTest"
   },
   "engines": {
     "node": ">=0.11.2"

@@ -2,24 +2,31 @@
 
 
 var debug = require('debug')('melkor-git'),
-  Git = require('git-wrapper'),
+  exec = require('child_process').exec,
   moment = require('moment'),
   path = require('path'),
-  Q = require('bluebird');
+  Q = require('bluebird'),
+  waigo = require('waigo');
 
-var fsUtils = require('./fsUtils'),
+var fsUtils = waigo.load('support/fsUtils'),
   fs = fsUtils.fs,
   tmp = fsUtils.tmp;
 
 
 
+// Git wrapper
+var Git = function(folder) {
+  this.folder = folder;
+}
+Git.prototype.exec = function*(command, args) {
+  var cmd = ['`which git`'].concat(command, args || []).join(' ');
+  // debug(cmd);
 
+  return yield Q.promisify(exec)(cmd, {
+    cwd: this.folder
+  });
+};
 
-/**
- * Instantiated repos.
- * @type {Object}
- */
-var repos = {};
 
 
 
@@ -31,23 +38,15 @@ var repos = {};
 var getRepo = function*(folder) {
   debug('Get repo: ' + folder);
 
-  if (!repos[folder]) {
-    let git = new Git({
-      'git-dir': '.git',
-      'work-tree': folder
-    });
-    Q.promisifyAll(git);
+  let git = new Git(folder);
 
-    let exists = yield fs.existsAsync(path.join(folder, '.git'));
-    if (!exists) {
-      debug('Initialising repo');
-      yield git.execAsync('init');
-    }
-
-    repos[folder] = git;
+  let exists = yield fs.existsAsync(path.join(folder, '.git'));
+  if (!exists) {
+    debug('Initialising repo');
+    yield git.exec('init');
   }
 
-  return repos[folder];
+  return git;
 };
 
 
@@ -66,7 +65,7 @@ exports.isFileInGit = function*(repo, fileName) {
   debug('Check if file is in git: ' + fileName);
 
   try {
-    yield repo.execAsync('ls-files', ['--error-unmatch', fileName]);
+    yield repo.exec('ls-files', ['--error-unmatch', fileName]);
     return true;
   } catch (err) {
     return false;
@@ -92,14 +91,14 @@ exports.commitFile = function*(folder, oldFileName, newFileName, commitMsg) {
 
   if (oldFileName && newFileName !== oldFileName) {
     debug('Remove old file: ' + oldFileName);
-    yield repo.execAsync('rm', [oldFileName]);
+    yield repo.exec('rm', [oldFileName]);
   }
 
   debug('Add new changes: ' + newFileName);
-  yield repo.execAsync('add', [newFileName]);
+  yield repo.exec('add', [newFileName]);
 
   // check if there is stuff to do
-  var status = yield repo.execAsync('status', []);
+  var status = yield repo.exec('status');
   if (0 <= status.indexOf('nothing to commit')) {
     debug('No changes to be committed');
     return;
@@ -107,11 +106,11 @@ exports.commitFile = function*(folder, oldFileName, newFileName, commitMsg) {
 
   // write commit msg to file
   var tmpFile = (yield tmp.fileAsync())[0];
-  debug('Write commit msg to tmpfile');
+  debug('Write commit msg');
   yield fs.writeFileAsync(tmpFile, commitMsg);
 
   debug('Commit');
-  yield repo.execAsync('commit', ['-F', tmpFile]);
+  yield repo.exec('commit', ['-F', tmpFile]);
 };
 
 
@@ -134,7 +133,7 @@ exports.removeFile = function*(folder, fileName) {
   }
 
   // remove file
-  yield repo.execAsync('rm', [fileName]);
+  yield repo.exec('rm', [fileName]);
 
   // commit
   var tmpFile = (yield tmp.fileAsync())[0];
@@ -142,7 +141,7 @@ exports.removeFile = function*(folder, fileName) {
   yield fs.writeFileAsync(tmpFile, 'Remove page: ' + fileName);
 
   debug('Commit');
-  yield repo.execAsync('commit', ['-F', tmpFile]);
+  yield repo.exec('commit', ['-F', tmpFile]);
 };
 
 
@@ -163,10 +162,16 @@ exports.getLastEdit = function*(repoFolder, fileName) {
   }
 
   debug('Get history for: ' + fileName);
-  let history = yield repo.execAsync('log', ['--', fileName]);
-  if (!history) {
+  let history = yield repo.exec('log', ['--', fileName]);
+
+  if (history instanceof Array) {
+    history = history[0];
+  }
+
+  if (!history || '' === history) {
     throw new Error('Error loading history for: ' + fileName);
   }
+
 
   debug('Parse history for last edit: '  + fileName);
   let commitId = history.match(/commit ([^\n]+)/im)[1];
