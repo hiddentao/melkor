@@ -6,6 +6,9 @@
     "name": "Ramesh Nair",
     "email": "ram@hiddentao.com"
   },
+  "keywords": [
+    "wiki", "git", "node", "markdown", "editing", "cms"
+  ],
   "dependencies": {
     "waigo": "~1.0.0",
     "co": "~3.0.5",
