@@ -9,7 +9,7 @@ mixin editButton(anchorClass)
   +actionLink(anchorClass, 'edit', '/' + slug + '/edit', 'edit', 'Edit')
 
 mixin deleteButton(anchorClass)
-  +actionLink(anchorClass, 'delete', '/' + slug + '/delete', 'trash-o', 'Delete')
+  +actionLink(anchorClass, 'delete', '/' + slug + '?_method=DELETE', 'trash-o', 'Delete')
 
 
 block content

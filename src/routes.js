@@ -2,9 +2,9 @@
 
 module.exports = {
   'GET /index': 'main.index',
-  'GET /:page/delete': 'main.delete',
+  'DEL /:page': ['main.delete'],
   'GET /:page/edit': 'main.edit',
-  'POST /:page/edit': ['bodyParser', 'main.update'],
+  'PUT /:page': ['bodyParser', 'main.update'],
   'GET /new': 'main.new',
   'GET /:page': 'main.show',
   'POST /:page': ['bodyParser', 'main.create'],

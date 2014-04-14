@@ -91,7 +91,7 @@
             reporter: 'spec'
           },
           src: [
-            '<%= config.test %>/*.test.js'
+            '<%= config.test %>/integration.test.js'
           ]
         }
       }

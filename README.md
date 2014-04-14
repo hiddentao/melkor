@@ -8,8 +8,7 @@ A simple, fast wiki powered by Node.js and Git.
 
 * Git back-end storage
 * [Markdown](https://github.com/evilstreak/markdown-js) syntax
-* [Responsive](http://getbootstrap.com) layout
-* Well tested
+* [Responsive](http://getbootstrap.com) layout (small-screen editing)
 
 ## Usage
 
@@ -38,7 +37,7 @@ Command-line options:
 
     $ npm install -g grunt-cli
     $ npm install
-    $ grunt <-- this will build the code and run the tests
+    $ npm run build <-- this will build the code and run the tests
 
 ## Why _Melkor_?
 

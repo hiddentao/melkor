@@ -15,7 +15,7 @@ block content
     .pageBody
       if error
         .alert.alert-danger There were some errors
-      form(role="form", method="post")
+      form(role="form", method="post", action=formAction)
         .form-group
           - var field = form.fields[0]
           label(for="page_title") #{field.label}

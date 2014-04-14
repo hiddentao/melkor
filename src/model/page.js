@@ -109,8 +109,10 @@ exports.save = function*(wikiFolder, pageSlug, data) {
     data.commitMsg = pageSlug ? 'Update page' : 'Create page';
   }
 
-  var newSlugName = yield exports.convertToSlug(wikiFolder, data.title),
-    newFileName = newSlugName + '.md';
+  var newSlugName =
+    yield exports.convertToSlug(wikiFolder, data.title, pageSlug);
+
+  var newFileName = newSlugName + '.md';
 
   yield fs.writeFileAsync(
     path.join(wikiFolder, newFileName),
@@ -153,13 +155,20 @@ exports.delete = function*(wikiFolder, pageSlug) {
  *
  * @param  {String} wikiFolder Data folder.
  * @param {String} pageTitle Page title.
+ * @param {String} oldPageSlug Old page name, e.g. if we're updating an
+ existing page we may still be able to re-use the old slug.
  * @return {String}
  */
-exports.convertToSlug = function*(wikiFolder, pageTitle) {
+exports.convertToSlug = function*(wikiFolder, pageTitle, oldPageSlug) {
   var slug = slugify(pageTitle).toLowerCase();
   // if slugify can't handle it then URL encode
   if ('' === slug) {
     slug = encodeURIComponent(pageTitle);
+  }
+
+  // if same as old slug then we're done
+  if (oldPageSlug === slug) {
+    return slug;
   }
 
   // if matches reserved wiki page slugs then modify slightly
@@ -170,7 +179,8 @@ exports.convertToSlug = function*(wikiFolder, pageTitle) {
   // iterate until no existing file matches this name
   var filePath = path.join( wikiFolder, slug );
   while (yield fs.existsAsync(filePath + '.md')) {
-    filePath = path.join( wikiFolder, slug + '-' );
+    slug += '-';
+    filePath = path.join( wikiFolder, slug );
   }
 
   return slug;

@@ -2,6 +2,7 @@ var _ = require('lodash'),
   path = require('path'),
   Q = require('bluebird'),
   shell = require('shelljs'),
+  request = require('supertest'),
   tmp = require('tmp')
 
 
@@ -61,3 +62,26 @@ exports.killBin = function(pid, done) {
     done();
   });
 }
+
+
+
+exports.wait = function(ms) {
+  return new Q(function(resolve, reject){
+    setTimeout(resolve, ms);
+  });
+}
+
+
+request.Test.prototype.endP = function() {
+  var self = this;
+
+  return new Q(function(resolve, reject) {
+    self.end(function(err, res) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};

@@ -28,6 +28,8 @@ exports.init = function*(folder, options) {
     postConfig: function(config) {
       config.startupSteps.unshift('wiki');
 
+      config.middleware.push({ id: 'methodOverride' });
+
       debug('Port: ' + config.port);
       config.port = options.port;
       config.baseURL = 'http://localhost:' + config.port;

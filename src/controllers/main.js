@@ -87,6 +87,7 @@ exports.edit = function*(next) {
   form.fields.body.value = pageData.body;
 
   yield this.render('edit', {
+    page: this.params.page,
     form: form
   });
 };
@@ -123,6 +124,7 @@ exports.update = function*(next) {
       this.status = err.status;
 
       yield this.render('edit', {
+        page: this.params.page,
         form: form,
         error: err
       });
@@ -197,7 +199,7 @@ exports.index = function*(next) {
   // newest first
   pages.sort(function(a, b) {
     if (sortByModified) {
-      return a.time - b.time;
+      return b.ts - a.ts;
     } else {
       return a.name > b.name;
     }
