@@ -14,7 +14,8 @@ A simple, fast wiki powered by Node.js and Git.
 
 ## Usage
 
-Melkor uses generators - **Node v0.11.2+ is required.**
+Melkor uses generators - **Node v0.11.2+ is required**. And ensure you have 
+the [Git global user](http://www.git-scm.com/book/ch7-1.html) configured.
 
 ```bash
 $ npm install -g melkor

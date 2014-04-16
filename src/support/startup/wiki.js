@@ -29,23 +29,6 @@ module.exports = function*(app) {
      */
     prettyPrintDate: function(date) {
       return '<abbr title="' + date + '">' + moment(date).from() + '</abbr>';
-    },
-
-    /**
-     * Pretty-print a Git author name.
-     * @param {String} author Author name and email
-     */
-    prettyPrintAuthor: function(author) {
-      if (author && 0 < author.length) {
-        var str = author;
-        var pos = str.indexOf('<');
-        if (0 < pos) {
-          str = str.substr(0, pos).trim();
-        }
-        return 'by <abbr title="' + author + '">' + str + '</abbr>';
-      } else {
-        return '';
-      }
     }
   };
 

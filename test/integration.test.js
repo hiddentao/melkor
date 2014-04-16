@@ -1,10 +1,8 @@
 var chai = require('chai'),
   cheerio = require('cheerio'),
-  co = require('co'),
   markdown = require('markdown').markdown;
   melkor = require('../'),
   path = require('path'),
-  Q = require('bluebird'),
   request = require('supertest'),
   shell = require('shelljs');
 
@@ -22,7 +20,7 @@ var test = module.exports = {
   beforeEach: function(done) {
     var self = this;
 
-    co(function*() {
+    testBase.coP(function*() {
       self.wikiFolder = yield testBase.createWikiFolder();
 
       self.app = yield* melkor.init(self.wikiFolder, {
@@ -31,14 +29,14 @@ var test = module.exports = {
 
       self.req = request('http://localhost:54567');
 
-    })(done);
+    }).nodeify(done);
   },
   afterEach: function(done) {
     var self = this;
 
-    co(function*() {
+    testBase.coP(function*() {
       yield* self.app.shutdown();
-    })(done);
+    }).nodeify(done);
   }
 };
 
@@ -117,6 +115,52 @@ test['create'] = {
         res.headers.location.should.eql('/blaze');
       })
       .end(done);
+  },
+  'commit messages': {
+    'Default git commit msg': function(done) {
+      var self = this;
+
+      var git = require('../src/support/git');
+
+      self.req
+        .post('/')
+        .send({
+          title: 'Blaze'
+        })
+        .expect(302)
+        .endP()
+        .then(function() {
+          return testBase.coP(git.getLastEdit, git, self.wikiFolder, 'blaze.md');
+        })
+        .then(function(history) {
+          history.author.should.not.be.undefined;
+          history.date.should.be.instanceOf(Date);
+          history.commit.should.not.be.undefined;
+          history.comment.should.eql('Create Blaze');
+        })
+        .nodeify(done);
+    },
+    'Custom commit msg': function(done) {
+      var self = this;
+
+      var git = require('../src/support/git');
+
+      self.req
+        .post('/')
+        .send({
+          title: 'Blaze',
+          comment: 'Test'
+        })
+        .expect(302)
+        .endP()
+        .then(function() {
+          return testBase.coP(git.getLastEdit, git, self.wikiFolder, 'blaze.md');
+        })
+        .then(function(history) {
+          history.comment.should.eql('Test');
+        })
+        .nodeify(done);
+    },
   },
   'Uses different slug name if page with same slug already exists': function(done) {
     var self = this;
@@ -232,11 +276,11 @@ test['index'] = {
   'default, sorted by name': function(done) {
     var self = this;
 
-    Q.coroutine(function*() {
+    testBase.coP(function*() {
       yield self.req.post('/').send({title: 'blah1'}).endP();
       yield self.req.post('/').send({title: 'blah3'}).endP();
       yield self.req.post('/').send({title: 'blah2'}).endP();
-    })()
+    })
       .then(function() {
         return self.req
           .get('/index')
@@ -260,13 +304,13 @@ test['index'] = {
 
     self.timeout(5000);
 
-    Q.coroutine(function*() {
+    testBase.coP(function*() {
       yield self.req.post('/').send({title: 'blah1'}).endP();
       yield testBase.wait(1001);
       yield self.req.post('/').send({title: 'blah3'}).endP();
       yield testBase.wait(1001);
       yield self.req.post('/').send({title: 'blah2'}).endP();
-    })()
+    })
       .then(function() {
         return self.req
           .get('/index?sort=modified')
@@ -396,6 +440,66 @@ test['edit'] = {
         res.headers.location.should.eql(self.url);
       })
       .end(done);
+  },
+  'Redirect to page even if nothing changed': function(done) {
+    var self = this;
+
+    this.req
+      .put(this.url)
+      .send({
+        title: 'Flash',
+        body: 'Test it'
+      })
+      .expect(302)
+      .expect(function(res) {
+        res.headers.location.should.eql(self.url);
+      })
+      .end(done);
+  },
+  'commit messages': {
+    'Default git commit msg': function(done) {
+      var self = this;
+
+      var git = require('../src/support/git');
+
+      self.req
+        .put(self.url)
+        .send({
+          title: 'Flash'
+        })
+        .endP()
+        .then(function() {
+          return testBase.coP(git.getLastEdit, git, self.wikiFolder, 'flash.md');
+        })
+        .then(function(history) {
+          history.author.should.not.be.undefined;
+          history.date.should.be.instanceOf(Date);
+          history.commit.should.not.be.undefined;
+          history.comment.should.eql('Update flash');
+        })
+        .nodeify(done);
+    },
+    'Custom commit msg': function(done) {
+      var self = this;
+
+      var git = require('../src/support/git');
+
+      self.req
+        .put(self.url)
+        .send({
+          title: 'Flash',
+          comment: 'Test'
+        })
+        .expect(302)
+        .endP()
+        .then(function() {
+          return testBase.coP(git.getLastEdit, git, self.wikiFolder, 'flash.md');
+        })
+        .then(function(history) {
+          history.comment.should.eql('Test');
+        })
+        .nodeify(done);
+    },
   },
   'Page content gets updated': function(done) {
     var self = this;

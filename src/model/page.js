@@ -12,7 +12,7 @@ var fsUtils = waigo.load('support/fsUtils'),
   fs = fsUtils.fs;
 
 
-var git = waigo.load('model/git');
+var git = waigo.load('support/git');
 
 
 
@@ -106,7 +106,7 @@ exports.index = function*(wikiFolder) {
  */
 exports.save = function*(wikiFolder, pageSlug, data) {
   if (!data.commitMsg) {
-    data.commitMsg = pageSlug ? 'Update page' : 'Create page';
+    data.commitMsg = (pageSlug ? 'Update ' + pageSlug : 'Create ' + data.title);
   }
 
   var newSlugName =

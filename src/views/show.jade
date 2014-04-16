@@ -36,4 +36,4 @@ block content
 
 
   .lastEdit
-    p Last edited <span class="author">!{ prettyPrintAuthor(lastEdit.author) }</span> <span class="date">!{ prettyPrintDate(lastEdit.date) }</span>
+    p Last edited by <abbr class="author" title="!{ lastEdit.author.email }">!{ lastEdit.author.name }</abbr> <span class="date">!{ prettyPrintDate(lastEdit.date) }</span>

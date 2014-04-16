@@ -162,7 +162,7 @@ exports.getLastEdit = function*(repoFolder, fileName) {
   }
 
   debug('Get history for: ' + fileName);
-  let history = yield repo.exec('log', ['--', fileName]);
+  let history = yield repo.exec('log', ['--pretty=format:"[%h][%ad][%an][%ae][%s]"', fileName]);
 
   if (history instanceof Array) {
     history = history[0];
@@ -172,15 +172,20 @@ exports.getLastEdit = function*(repoFolder, fileName) {
     throw new Error('Error loading history for: ' + fileName);
   }
 
-
   debug('Parse history for last edit: '  + fileName);
-  let commitId = history.match(/commit ([^\n]+)/im)[1];
-  let authorId = history.match(/Author: ([^\n]+)/im)[1];
-  let when = moment(history.match(/Date: ([^\n]+)/im)[1]).toDate();
+  let tokens = history.match(/[^\[\]]+/igm),
+    commitId = tokens[0],
+    date = moment(tokens[1]).toDate(),
+    author = {
+      name: tokens[2],
+      email: tokens[3]
+    },
+    comment = tokens[4];
 
   return {
     commit: commitId,
-    author: authorId,
-    date: when
+    author: author,
+    date: date,
+    comment: comment
   };
 };
