@@ -7,18 +7,24 @@
     "email": "ram@hiddentao.com"
   },
   "keywords": [
-    "wiki", "git", "node", "markdown", "editing", "cms"
+    "wiki",
+    "git",
+    "node",
+    "markdown",
+    "editing",
+    "cms"
   ],
   "dependencies": {
     "waigo": "~1.0.0",
     "co": "~3.0.5",
     "bluebird": "~1.2.1",
-    "markdown": "~0.5.0",
     "commander": "~2.2.0",
     "moment": "~2.5.1",
     "debug": "~0.8.0",
     "slug": "~0.4.2",
-    "tmp": "0.0.23"
+    "tmp": "0.0.23",
+    "marked": "~0.3.2",
+    "highlight.js": "~8.0.0"
   },
   "devDependencies": {
     "time-grunt": "~0.2.3",
@@ -26,7 +32,6 @@
     "load-grunt-tasks": "~0.2.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-sass": "~0.12.1",
     "grunt-contrib-concat": "~0.4.0",

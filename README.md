@@ -7,7 +7,7 @@ A simple, fast wiki powered by Node.js and Git.
 ## Features
 
 * Git back-end storage
-* [Markdown](https://github.com/evilstreak/markdown-js) syntax
+* Markdown editing, [Github flavour](https://help.github.com/articles/github-flavored-markdown)
 * [Responsive](http://getbootstrap.com) layout (small-screen editing)
 
 [![Screenshot](https://raw.githubusercontent.com/hiddentao/melkor/master/screenshots/mobile.png)](https://github.com/hiddentao/melkor/tree/master/screenshots)

@@ -1,9 +1,11 @@
 var chai = require('chai'),
   cheerio = require('cheerio'),
-  markdown = require('markdown').markdown;
+  hljs = require('highlight.js'),
+  marked = require('marked'),
   melkor = require('../'),
   path = require('path'),
   request = require('supertest'),
+  Q = require('bluebird'),
   shell = require('shelljs');
 
 var assert = chai.assert,
@@ -48,8 +50,26 @@ test['home'] = {
 
     fs.readFileAsync(path.join(__dirname, '..', 'data', 'home.md'), 'utf-8')
       .then(function(defaultHomeMarkdown) {
-        var html = markdown.toHTML(defaultHomeMarkdown);
+        hljs.configure({
+          classPrefix: ''
+        });
 
+        marked.setOptions({
+          gfm: true,
+          tables: true,
+          breaks: true,
+          pedantic: false,
+          sanitize: false,
+          smartLists: true,
+          smartypants: false,
+          highlight: function (code) {
+            return hljs.highlightAuto(code).value;
+          }
+        });
+
+        return Q.promisify(marked)(defaultHomeMarkdown);
+      })
+      .then(function(html) {
         return self.req
           .get('/')
           .expect(200)
@@ -202,7 +222,7 @@ test['create'] = {
             var $ = cheerio.load(res.text);
 
             $('h1').text().should.eql('Blaze');
-            $('.pageBody').text().should.eql('Blueberry');
+            $('.pageBody').text().should.eql('Blueberry\n');
           })
           .endP();
       })
@@ -224,7 +244,7 @@ test['create'] = {
           .expect(function(res) {
             var $ = cheerio.load(res.text);
 
-            $('.pageBody').html().should.eql('<p><strong>Blueberry</strong></p>');
+            $('.pageBody').html().should.eql('<p><strong>Blueberry</strong></p>\n');
           })
           .endP();
       })
@@ -520,7 +540,7 @@ test['edit'] = {
             var $ = cheerio.load(res.text);
 
             $('h1').text().should.eql('Flash');
-            $('.pageBody').text().should.eql('Woohoo');
+            $('.pageBody').text().should.eql('Woohoo\n');
           })
           .endP();
       })

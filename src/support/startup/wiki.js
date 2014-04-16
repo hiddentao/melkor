@@ -1,8 +1,11 @@
 "use strict";
 
 var debug = require('debug')('melkor-startup'),
+  hljs = require('highlight.js'),
+  marked = require('marked'),
   moment = require('moment'),
   path = require('path'),
+  Q = require('bluebird'),
   waigo = require('waigo');
 
 
@@ -19,7 +22,29 @@ var fsUtils = waigo.load('support/fsUtils'),
 module.exports = function*(app) {
   debug('Wiki title: ' + app.config.wikiTitle);
 
+  /* markdown formatter */
+
+  hljs.configure({
+    classPrefix: ''
+  });
+
+  marked.setOptions({
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value;
+    }
+  });
+  app.toMarkdown = Q.promisify(marked);
+
+
   /** app.locals is passed to template within outputFormats' render() method */
+
   app.locals = {
     wikiTitle: app.config.wikiTitle,
 
@@ -32,7 +57,8 @@ module.exports = function*(app) {
     }
   };
 
-  // create homepage if not already available
+  /* create homepage if not already available */
+
   debug('Check for homepage');
 
   try {

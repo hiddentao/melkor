@@ -2,7 +2,6 @@
 
 
 var debug = require('debug')('melkor-controller'),
-  markdown = require('markdown').markdown,
   waigo = require('waigo');
 
 var pageModel = waigo.load('model/page'),
@@ -175,7 +174,7 @@ exports.show = function*(next) {
     }
   }
 
-  data.body = markdown.toHTML(data.body || '');
+  data.body = yield this.app.toMarkdown(data.body || '');
 
   data.nav = page;
 
