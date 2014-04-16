@@ -60,6 +60,8 @@ exports.create = function*(next) {
     if (err instanceof FormValidationError) {
       this.status = err.status;
 
+      this.request.leanErrors = true;
+
       yield this.render('new', {
         nav: 'new',
         form: form,
@@ -102,25 +104,42 @@ exports.update = function*(next) {
 
   var form = Form.new('page');
 
+  var pageData = yield pageModel.load(this.app.config.wikiFolder, this.params.page);
+
+  // set original values
+  yield form.setOriginalValues({
+    title: pageData.title,
+    body: pageData.body
+  });
+
+  var pageSlug = pageData.slug;
+
   try {
+    // set current values and validate
     yield form.setValues(this.request.body);
     yield form.validate();
 
-    var pageSlug = yield pageModel.save(
-      this.app.config.wikiFolder,
-      this.params.page,
-      {
-        title: form.fields.title.value,
-        body: form.fields.body.value,
-        commitMsg: form.fields.comment.value
-      }
-    );
+    // if values have changed
+    if (form.fields.title.isDirty() || form.fields.body.isDirty()) {
+      // save changes
+      pageSlug = yield pageModel.save(
+        this.app.config.wikiFolder,
+        this.params.page,
+        {
+          title: form.fields.title.value,
+          body: form.fields.body.value,
+          commitMsg: form.fields.comment.value
+        }
+      );
+    }
 
     this.response.redirect('/' + pageSlug);
 
   } catch (err) {
     if (err instanceof FormValidationError) {
       this.status = err.status;
+
+      this.request.leanErrors = true;
 
       yield this.render('edit', {
         page: this.params.page,

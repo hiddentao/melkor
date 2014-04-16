@@ -15,7 +15,7 @@
     "cms"
   ],
   "dependencies": {
-    "waigo": "~1.0.0",
+    "waigo": "~1.1.2",
     "co": "~3.0.5",
     "bluebird": "~1.2.1",
     "commander": "~2.2.0",
