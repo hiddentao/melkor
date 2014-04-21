@@ -1,3 +1,6 @@
+"use strict";
+
+
 var Q = require('bluebird');
 
 var fs = require('fs'),

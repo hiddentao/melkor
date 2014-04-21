@@ -21,6 +21,10 @@
         }
       },
       watch: {
+        js: {
+          files: ['<%= config.src.js %>/{,*/}{,*/}*.js'],
+          tasks: ['js']          
+        },
         sass: {
           files: ['<%= config.src.sass %>/{,*/}{,*/}*.scss'],
           tasks: ['sass']
@@ -53,9 +57,11 @@
           },
           src: [
             '<%= config.bower %>/jquery/dist/jquery.js',
+            '<%= config.bower %>/history.js/scripts/bundled/html5/jquery.history.js',
             '<%= config.bower %>/sass-bootstrap/js/transition.js',
             '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
             '<%= config.bower %>/sass-bootstrap/js/collapse.js',
+            '<%= config.bower %>/sass-bootstrap/js/modal.js',
             '<%= config.src.js %>/app.js',
           ],
           dest: '<%= config.build.js %>/app.js'
@@ -98,13 +104,16 @@
     });
 
 
+    grunt.registerTask('js', [
+      'concat:js',
+      'uglify:js'
+    ]);
 
     grunt.registerTask('build', [
       'jshint',
       'sass',
       'copy',
-      'concat',
-      'uglify',
+      'js',
       'mochaTest'
     ]);
 

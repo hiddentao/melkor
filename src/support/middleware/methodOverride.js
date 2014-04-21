@@ -1,5 +1,12 @@
+"use strict";
+
+
 var debug = require('debug')('melkor-method-override');
 
+
+/**
+ * Middleware for overriding request method using a request query or form body parameter.
+ */
 module.exports = function() {
   return function*(next) {
     var override = this.request.query._method ||

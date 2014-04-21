@@ -50,8 +50,15 @@ html
 
     main
       .row
-        .col-md-12
+        #content.col-md-12
           block content
+
+    #loading.modal(role="dialog",aria-labelledby="loading",aria-hidden="true")
+      .modal-dialog.modal-sm
+        .modal-content
+          .modal-body
+            i.fa.fa-cog.fa-spin
+            span Loading...
 
     footer
       p Powered by <a href="https://github.com/hiddentao/melkor">melkor</a>

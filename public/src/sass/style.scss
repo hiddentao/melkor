@@ -60,6 +60,24 @@ footer {
   font-size: 80%;
 }
 
+#loading {
+  font-size: 140%;
+  text-align: center;
+  
+  span {
+    margin-left: 0.2em;
+  }
+}
+@media (min-width: 768px) {
+  #loading {
+    .modal-dialog {
+      width: 300px;
+    }    
+  }
+}
+
+
+
 /* site index */
 
 #wikiIndex {

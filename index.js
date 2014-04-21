@@ -29,6 +29,7 @@ exports.init = function*(folder, options) {
       config.startupSteps.unshift('wiki');
 
       config.middleware.push({ id: 'methodOverride' });
+      config.middleware.push({ id: 'ajaxRequests' });
 
       debug('Port: ' + config.port);
       config.port = options.port;

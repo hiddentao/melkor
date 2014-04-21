@@ -1,0 +1,36 @@
+mixin actionLink(anchorClass, role, link, icon, text, onclick)
+  a(type="button", role=role, class=anchorClass, href=link)
+    i(class="fa fa-" + icon)
+      span #{text}
+
+mixin editButton(anchorClass)
+  +actionLink(anchorClass, 'edit', '/' + slug + '/edit', 'edit', 'Edit')
+
+mixin deleteButton(anchorClass)
+  +actionLink(anchorClass, 'delete', '/' + slug + '?_method=DELETE', 'trash-o', 'Delete')
+
+
+.pageHeader
+  .actions
+    .visible-xs
+      .btn-group
+        button.btn.btn-default.dropdown-toggle(data-toggle="dropdown", type="button")
+          i.fa.fa-chevron-circle-down
+        ul.dropdown-menu.pull-right(role="menu")
+          li
+            +editButton()
+          li
+            +deleteButton()
+    .hidden-xs
+      .btn-group
+        +editButton('btn btn-default')
+        +deleteButton('btn btn-default')
+
+  h1 #{title}
+
+
+.pageBody !{body}
+
+
+.lastEdit
+  p Last edited by <abbr class="author" title="!{ lastEdit.author.email }">!{ lastEdit.author.name }</abbr> <span class="date">!{ prettyPrintDate(lastEdit.date) }</span>

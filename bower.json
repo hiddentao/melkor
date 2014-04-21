@@ -6,7 +6,9 @@
   ],
   "license": "MIT",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "history.js": "~1.8.0"
+  },
   "devDependencies": {
     "font-awesome": "~4.0.3",
     "bootstrap": "~3.1.1",
