@@ -4,32 +4,30 @@ mixin fieldError(fieldName)
       .alert.alert-danger #{err}
 
 
-block content
+#editor
+  .pageHeader
+    h1 #{title}
 
-  #editor
-    .pageHeader
-      h1 #{title}
-
-    .pageBody
-      if error
-        .alert.alert-danger There were some errors
-      form(role="form", method="post", action=formAction)
+  .pageBody
+    if error
+      .alert.alert-danger There were some errors
+    form(role="form", method="post", action=formAction)
+      .form-group
+        - var field = form.fields.title
+        label(for="page_title") #{field.label}
+        input#page_title.form-control(name="title", type="text", placeholder="Page title...", value=field.value)
+        span.help-block #{titleHelp}
+        +fieldError(field.name)
+      .form-group
+        - var field = form.fields.body
+        label(for="page_body") #{field.label} (markdown)
+        textarea#page_body.form-control(name="body", placeholder="Page body...", rows="20") #{field.value}
+        +fieldError(field.name)
+      .well.comment
         .form-group
-          - var field = form.fields.title
-          label(for="page_title") #{field.label}
-          input#page_title.form-control(name="title", type="text", placeholder="Page title...", value=field.value)
-          span.help-block #{titleHelp}
+          - var field = form.fields.comment
+          label.sr-only(for="page_comment") #{field.label}
+          input#page_comment.form-control(name="comment", type="text", placeholder="Comment about this change (optional)", value=field.value)
+          span.help-block This will get entered as the Git commit message
           +fieldError(field.name)
-        .form-group
-          - var field = form.fields.body
-          label(for="page_body") #{field.label} (markdown)
-          textarea#page_body.form-control(name="body", placeholder="Page body...", rows="20") #{field.value}
-          +fieldError(field.name)
-        .well.comment
-          .form-group
-            - var field = form.fields.comment
-            label.sr-only(for="page_comment") #{field.label}
-            input#page_comment.form-control(name="comment", type="text", placeholder="Comment about this change (optional)", value=field.value)
-            span.help-block This will get entered as the Git commit message
-            +fieldError(field.name)
-        button.btn.btn-default(type="submit") #{action}
+      button.btn.btn-default(type="submit") #{action}
