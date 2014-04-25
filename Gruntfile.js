@@ -62,6 +62,7 @@
             '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
             '<%= config.bower %>/sass-bootstrap/js/collapse.js',
             '<%= config.bower %>/sass-bootstrap/js/modal.js',
+            '<%= config.bower %>/jquery-form/jquery.form.js',
             '<%= config.src.js %>/app.js',
           ],
           dest: '<%= config.build.js %>/app.js'

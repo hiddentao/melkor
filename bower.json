@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "history.js": "~1.8.0"
+    "history.js": "~1.8.0",
+    "jquery-form": "~3.46.0"
   },
   "devDependencies": {
     "font-awesome": "~4.0.3",

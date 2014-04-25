@@ -9,37 +9,12 @@ $(function() {
     type: 'GET'
   });
 
-  $(document).ajaxStart(function() {
-    $('#loading').modal('show');
-  });
-  
-  $(document).ajaxComplete(function() {
-    $('#loading').modal('hide');
-  });
-
 
   var $content = $('#content');
 
   var stateCounter = 0;
 
-  var loadUrl = function(url) {
-    $.ajax({
-      url: url,
-      success: function(data) { 
-        if (url !== location.href) {
-          History.pushState({
-            counter: stateCounter
-          }, data.title, url);
-        }
 
-        $content.html(data.html);
-        processContent($content);
-      },
-      error: function(xhr, status, error) {
-        alert(status + ', ' + error);
-      }
-    });    
-  }
 
 
   /**
@@ -84,9 +59,73 @@ $(function() {
 
       e.preventDefault();
       e.stopPropagation();
+
       loadUrl(anchorUrl);
     });
+
+    // forms
+    $('form', rootElement).ajaxForm({
+      beforeSubmit: showProgressMsg,
+      success: handleAjaxSuccess(),
+      error: handleAjaxError
+    });
   };
+
+
+
+  /**
+   * Get AJAX error handler
+   */
+  var handleAjaxError = function(xhr, status, error) {
+    hideProgressMsg();
+
+    alert('AJAX error for URL: ' + url + ' -> ' + status + ', ' + error);    
+  };
+
+
+  /** Get AJAX success handler */
+  var handleAjaxSuccess = function(url) {
+    return function(data, status, xhr) {
+      hideProgressMsg();
+
+      var finalURL = xhr.getResponseHeader('TM-finalURL') || url || location.href;
+
+      if (finalURL !== location.href) {
+        History.pushState({
+          counter: stateCounter
+        }, data.title, finalURL);
+      }
+
+      $content.html(data.html);
+      processContent($content);      
+    }
+  }
+
+
+  /**
+   * Load URL via AJAX
+   */
+  var loadUrl = function(url) {
+    showProgressMsg();
+
+    $.ajax({
+      url: url,
+      success: handleAjaxSuccess(url),
+      error: handleAjaxError
+    });    
+  }
+
+
+  var showProgressMsg = function() {
+    $('#loading').modal('show');
+  };
+  
+
+  var hideProgressMsg = function() {
+    $('#loading').modal('hide');
+  };
+
+
 
   processContent($content);
 
