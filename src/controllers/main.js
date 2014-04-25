@@ -23,6 +23,7 @@ exports.new = function*(next) {
   }
 
   yield this.render('new', {
+    title: 'Create new page',
     nav: 'new',
     form: form
   });
@@ -63,6 +64,7 @@ exports.create = function*(next) {
       this.request.leanErrors = true;
 
       yield this.render('new', {
+        title: 'Create new page',
         nav: 'new',
         form: form,
         error: err
@@ -88,6 +90,7 @@ exports.edit = function*(next) {
   form.fields.body.value = pageData.body;
 
   yield this.render('edit', {
+    title: 'Edit page',
     page: this.params.page,
     form: form
   });
@@ -142,6 +145,7 @@ exports.update = function*(next) {
       this.request.leanErrors = true;
 
       yield this.render('edit', {
+        title: 'Edit page',
         page: this.params.page,
         form: form,
         error: err
@@ -225,6 +229,7 @@ exports.index = function*(next) {
 
 
   yield this.render('index', {
+    title: 'Wiki index',
     nav: 'index',
     pages: pages,
     sort: sortByModified ? 'modified' : 'name'

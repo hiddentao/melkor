@@ -79,7 +79,7 @@ $(function() {
   var handleAjaxError = function(xhr, status, error) {
     hideProgressMsg();
 
-    alert('AJAX error for URL: ' + url + ' -> ' + status + ', ' + error);    
+    alert('AJAX error: ' + status + ', ' + error);    
   };
 
 
