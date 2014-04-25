@@ -9,7 +9,8 @@ Some of the features Melkor provides:
 * All the pages are written in [Github-flavoured markdown](https://help.github.com/articles/github-flavored-markdown).
 * All changes are stored in a Git repository.
 * You can comment on individual changes - these get saved as Git commit messages.
-* The page layout is responsive. Editing on mobile devices works!
+* The page layout is responsive and adapts to different screen sizes.
+* Editing and navigation is AJAX-driven, but degrades gracefully for non-JS browsers.
 
 Use [Github-flavoured](https://help.github.com/articles/github-flavored-markdown) markdown, including code blocks:
 
