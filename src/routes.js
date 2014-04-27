@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  'GET /_test': ['main._test'],
   'GET /index': 'main.index',
   'DEL /:page': ['main.delete'],
   'GET /:page/edit': 'main.edit',

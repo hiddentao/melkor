@@ -235,3 +235,22 @@ exports.index = function*(next) {
     sort: sortByModified ? 'modified' : 'name'
   });
 };
+
+
+
+
+
+
+/**
+ * In-browser tests.
+ */
+exports._test = function*(next) {
+  debug('In-browser tests');
+
+  yield this.render('test');
+};
+
+
+
+
+

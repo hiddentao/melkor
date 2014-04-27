@@ -15,8 +15,6 @@ $(function() {
   var stateCounter = 0;
 
 
-
-
   /**
    * Handle navigating back in history
    */
@@ -128,5 +126,4 @@ $(function() {
 
 
   processContent($content);
-
 });
