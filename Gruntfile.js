@@ -101,8 +101,29 @@
             '<%= config.test %>/integration.test.js'
           ]
         }
-      }
+      },
+      melkor: {
+        test: {
+          options: {
+            port: 55779
+          }
+        }
+      },
+      mocha: {
+        test: {
+          options: {
+            log: true,
+            logErrors: true,
+            reporter: 'Spec',
+            run: true,
+            urls: [ 'http://localhost:55779/_test' ]
+          },
+        },
+      },
     });
+
+
+    grunt.loadTasks('tasks');
 
 
     grunt.registerTask('js', [
@@ -115,7 +136,13 @@
       'sass',
       'copy',
       'js',
-      'mochaTest'
+      'test'
+    ]);
+
+    grunt.registerTask('test', [
+      'mochaTest',
+      'melkor',
+      'mocha'
     ]);
 
     grunt.registerTask('default', [ 'build' ]);

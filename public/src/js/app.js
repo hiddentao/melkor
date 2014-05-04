@@ -1,6 +1,10 @@
 $(function() {
   var History = window.History;
 
+  var askUser = function(msg) {
+    return (window._testConfirm || window.confirm).call(null, msg);
+  }
+
   $.ajaxSetup({
     timeout: 3000,
     async: true,
@@ -40,13 +44,8 @@ $(function() {
    */
   var processContent = function(rootElement) {
 
-    // confirm deletions
-    $('a[role=delete]', rootElement).click(function(e) {
-      return confirm('Are you sure you want to delete this?');
-    });
-
-    // AJAX-powered editing
-    $('a[role=edit], .pageBody a', rootElement).click(function(e) {
+    // AJAX-powered navigation and actions
+    $('a[role=edit], a[role=delete], .pageBody a', rootElement).click(function(e) {      
       var $a = $(e.delegateTarget);
 
       // if the URL is not relative then don't process it via AJAX.
@@ -57,6 +56,13 @@ $(function() {
 
       e.preventDefault();
       e.stopPropagation();
+
+      // confirm deletions
+      if ('delete' === $a.attr('role')) {
+        if (!askUser('Are you sure you want to delete this?')) {
+          return;
+        }
+      }
 
       loadUrl(anchorUrl);
     });
@@ -77,7 +83,14 @@ $(function() {
   var handleAjaxError = function(xhr, status, error) {
     hideProgressMsg();
 
-    alert('AJAX error: ' + status + ', ' + error);    
+    if (xhr.responseJSON) {      
+      $content.html(xhr.responseJSON.html);
+      processContent($content);
+    } else {
+      alert('AJAX error: ' + status + ', ' + error);    
+    }
+
+    $content.trigger('melkorAjaxError', [error]);
   };
 
 
@@ -96,6 +109,8 @@ $(function() {
 
       $content.html(data.html);
       processContent($content);      
+
+      $content.trigger('melkorAjaxSuccess', [url]);
     }
   }
 

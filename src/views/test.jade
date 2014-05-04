@@ -1,0 +1,32 @@
+extends base_layout
+
+
+block main
+  main
+    .row
+      #content.col-md-12
+    .row
+      #mocha.col-md-12
+
+block scripts
+  // app scripts
+  script(type="text/javascript", src="/js/app.js")
+
+  // mocha setup
+  script(src="/js_test/mocha.js", type="text/javascript", charset="utf-8")
+  script.
+    mocha.setup('bdd');
+
+  // assertion libs
+  script(src="/js_test/chai.js", type="text/javascript", charset="utf-8")
+  script.
+    var assert = chai.assert,
+      expect = chai.expect,
+      should = chai.should();
+  
+  // the tests
+  script(src="/js_test/spec/ajax.test.js", type="text/javascript", charset-"utf-8")
+  
+  // kick off
+  script.
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) mocha.run();

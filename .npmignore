@@ -8,4 +8,5 @@ Gruntfile.*
 test/
 public/bower_components
 public/src
+public/build/js_test
 screenshots/

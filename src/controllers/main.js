@@ -7,7 +7,8 @@ var debug = require('debug')('melkor-controller'),
 var pageModel = waigo.load('model/page'),
   waigoForm = waigo.load('support/forms/form'),
   Form = waigoForm.Form,
-  FormValidationError = waigoForm.FormValidationError;
+  FormValidationError = waigoForm.FormValidationError,
+  RuntimeError = waigo.load('support/errors').RuntimeError;
 
 
 /**
@@ -245,6 +246,12 @@ exports.index = function*(next) {
  * In-browser tests.
  */
 exports._test = function*(next) {
+  if ('test' !== this.app.config.mode) {
+    throw new RuntimeError(
+      'In-browser tests can only be run if NODE_ENV=test', 400
+    );
+  }
+
   debug('In-browser tests');
 
   yield this.render('test');
