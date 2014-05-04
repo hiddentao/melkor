@@ -30,6 +30,8 @@ describe('AJAX tests', function() {
 
 
   beforeEach(function(done) {
+    this.timeout(4000);
+    
     window._testConfirm = window.confirm;
 
     processUrl('/home', done);
