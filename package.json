@@ -53,7 +53,7 @@
     "melkor": "./bin/melkor"
   },
   "scripts": {
-    "prepublish": "npm prune && npm build",
+    "prepublish": "npm prune && npm run build",
     "build": "NODE_ENV=test node --harmony `which grunt`"
   },
   "engines": {
