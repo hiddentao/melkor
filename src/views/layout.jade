@@ -7,4 +7,6 @@ block main
         block content
 
 block scripts
-  script(type="text/javascript", src="/js/app.js", async, defer)
+  script(type="text/javascript", src="/js/base.js", defer)
+  if useAjax
+    script(type="text/javascript", src="/js/ajax.js", defer)

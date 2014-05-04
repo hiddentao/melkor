@@ -19,7 +19,8 @@ module.exports = function(grunt) {
 
       var options = {
         port: userOptions.port || parseInt(Math.random() * 1000 + 55000),
-        title: userOptions.title || 'Gruntwiki'
+        title: userOptions.title || 'Gruntwiki',
+        ajax: userOptions.ajax || false
       }
 
       grunt.log.success('Starting wiki "' + options.title + '" for ' + src +

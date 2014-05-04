@@ -54,8 +54,11 @@ module.exports = function*(app) {
      */
     prettyPrintDate: function(date) {
       return '<abbr title="' + date + '">' + moment(date).from() + '</abbr>';
-    }
+    },
+
+    useAjax: app.config.useAjax
   };
+
 
   /* create homepage if not already available */
 

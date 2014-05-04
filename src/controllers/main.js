@@ -246,12 +246,6 @@ exports.index = function*(next) {
  * In-browser tests.
  */
 exports._test = function*(next) {
-  if ('test' !== this.app.config.mode) {
-    throw new RuntimeError(
-      'In-browser tests can only be run if NODE_ENV=test', 400
-    );
-  }
-
   debug('In-browser tests');
 
   yield this.render('test');

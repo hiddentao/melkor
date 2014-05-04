@@ -10,7 +10,8 @@ block main
 
 block scripts
   // app scripts
-  script(type="text/javascript", src="/js/app.js")
+  script(type="text/javascript", src="/js/base.js")
+  script(type="text/javascript", src="/js/ajax.js")
 
   // mocha setup
   script(src="/js_test/mocha.js", type="text/javascript", charset="utf-8")
@@ -29,4 +30,6 @@ block scripts
   
   // kick off
   script.
-    if (navigator.userAgent.indexOf('PhantomJS') < 0) mocha.run();
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+      mocha.run();
+    }

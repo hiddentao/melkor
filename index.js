@@ -12,6 +12,7 @@ var debug = require('debug')('melkor-init'),
  * @param {Object} options Additional options.
  * @param {Number} options.port Port to listen on.
  * @param {String} options.title Wiki title.
+ * @param {Boolean} options.ajax Enable AJAX navigation and editing.
  *
  * @return {Object} melkor application object.
  */
@@ -29,7 +30,12 @@ exports.init = function*(folder, options) {
       config.startupSteps.unshift('wiki');
 
       config.middleware.push({ id: 'methodOverride' });
-      config.middleware.push({ id: 'ajaxRequests' });
+
+      config.useAjax = options.ajax;
+      if (config.useAjax) {
+        debug('AJAX enabled');
+        config.middleware.push({ id: 'ajaxRequests' });
+      }
 
       debug('Port: ' + config.port);
       config.port = options.port;

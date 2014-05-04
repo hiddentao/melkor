@@ -51,28 +51,39 @@
         }
       },
       concat: {
-        js: {
+        base_js: {
           options: {
             separator: ';'
           },
           src: [
             '<%= config.bower %>/jquery/dist/jquery.js',
-            '<%= config.bower %>/history.js/scripts/bundled/html5/jquery.history.js',
             '<%= config.bower %>/sass-bootstrap/js/transition.js',
             '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
             '<%= config.bower %>/sass-bootstrap/js/collapse.js',
             '<%= config.bower %>/sass-bootstrap/js/modal.js',
-            '<%= config.bower %>/jquery-form/jquery.form.js',
-            '<%= config.src.js %>/app.js',
           ],
-          dest: '<%= config.build.js %>/app.js'
-        }
+          dest: '<%= config.build.js %>/base.js'
+        },
+        ajax_js: {
+          options: {
+            separator: ';'
+          },
+          src: [
+            '<%= config.bower %>/history.js/scripts/bundled/html5/jquery.history.js',
+            '<%= config.bower %>/jquery-form/jquery.form.js',
+            '<%= config.src.js %>/ajax.js'
+          ],
+          dest: '<%= config.build.js %>/ajax.js'
+        },
       },
      uglify: {
         js: {
           files: {
-            '<%= config.build.js %>/app.js': [
-              '<%= config.build.js %>/app.js'
+            '<%= config.build.js %>/base.js': [
+              '<%= config.build.js %>/base.js'
+            ],
+            '<%= config.build.js %>/ajax.js': [
+              '<%= config.build.js %>/ajax.js'
             ]
           }
         }
@@ -105,7 +116,8 @@
       melkor: {
         test: {
           options: {
-            port: 55779
+            port: 55779,
+            ajax: true
           }
         }
       },
@@ -127,8 +139,8 @@
 
 
     grunt.registerTask('js', [
-      'concat:js',
-      'uglify:js'
+      'concat',
+      'uglify'
     ]);
 
     grunt.registerTask('build', [

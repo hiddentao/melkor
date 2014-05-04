@@ -30,13 +30,14 @@ Browse to http://localhost:4567 to start using the wiki.
 Command-line options:
 
 ```bash
-  Usage: melkor [options]
+Usage: melkor [options]
 
-  Options:
+Options:
 
-    -h, --help           output usage information
-    -p, --port <num>     Port number (Default: 4567)
-    -t, --title <title>  Wiki title (Default: Wiki)
+  -h, --help           output usage information
+  -p, --port <num>     Port number (Default: 4567)
+  -t, --title <title>  Wiki title (Default: Wiki)
+  -a, --ajax           Enable AJAX navigation and editing
 ```
 
 ## Development
