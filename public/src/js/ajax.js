@@ -6,7 +6,7 @@ $(function() {
   }
 
   $.ajaxSetup({
-    timeout: 3000,
+    timeout: 10000,
     async: true,
     cache: false,
     dataType: 'json',
