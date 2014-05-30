@@ -11,7 +11,7 @@
         test: 'test',
         bower: 'public/bower_components',
         src: {
-          sass: 'public/src/sass',
+          stylus: 'public/src/stylus',
           js: 'public/src/js'
         },
         build: {
@@ -25,9 +25,9 @@
           files: ['<%= config.src.js %>/{,*/}{,*/}*.js'],
           tasks: ['js']          
         },
-        sass: {
-          files: ['<%= config.src.sass %>/{,*/}{,*/}*.scss'],
-          tasks: ['sass']
+        stylus: {
+          files: ['<%= config.src.stylus %>/{,*/}{,*/}*.styl'],
+          tasks: ['stylus']
         }
       },
       jshint: {
@@ -39,14 +39,13 @@
           '<%= config.backend %>/{,*/}{,*/}{,*/}*.js'
         ]
       },
-      sass: {
+      stylus: {
         build: {
           options: {
-            noLineComments: true,
-            outputStyle: 'compressed'
+            compress: true,
           },
           files: {
-            '<%= config.build.css %>/style.css': '<%= config.src.sass %>/style.scss'
+            '<%= config.build.css %>/style.css': '<%= config.src.stylus %>/style.styl'
           }
         }
       },
@@ -57,10 +56,10 @@
           },
           src: [
             '<%= config.bower %>/jquery/dist/jquery.js',
-            '<%= config.bower %>/sass-bootstrap/js/transition.js',
-            '<%= config.bower %>/sass-bootstrap/js/dropdown.js',
-            '<%= config.bower %>/sass-bootstrap/js/collapse.js',
-            '<%= config.bower %>/sass-bootstrap/js/modal.js',
+            '<%= config.bower %>/bootstrap-stylus/js/transition.js',
+            '<%= config.bower %>/bootstrap-stylus/js/dropdown.js',
+            '<%= config.bower %>/bootstrap-stylus/js/collapse.js',
+            '<%= config.bower %>/bootstrap-stylus/js/modal.js',
           ],
           dest: '<%= config.build.js %>/base.js'
         },
@@ -95,7 +94,7 @@
             {
               expand: true,
               flatten: true,
-              src: '<%= config.bower %>/font-awesome/fonts/*',
+              src: '<%= config.bower %>/font-awesome-stylus/fonts/*',
               dest: '<%= config.build.fonts %>/',
               filter: 'isFile'
             }
@@ -145,7 +144,7 @@
 
     grunt.registerTask('build', [
       'jshint',
-      'sass',
+      'stylus',
       'copy',
       'js',
       'test'
