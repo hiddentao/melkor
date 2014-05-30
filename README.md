@@ -1,6 +1,6 @@
 # melkor
 
-[![Build Status](https://secure.travis-ci.org/hiddentao/melkor.png)](http://travis-ci.org/hiddentao/melkor)
+[![Build Status](https://secure.travis-ci.org/hiddentao/melkor.png)](http://travis-ci.org/hiddentao/melkor) <- waiting for [node-sass bugfix](https://github.com/andrew/node-sass/issues/301), melkor works fine with node 0.11.10
 
 A simple, fast wiki powered by Node.js and Git.
 
