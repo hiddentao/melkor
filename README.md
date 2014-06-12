@@ -4,6 +4,8 @@
 
 A simple, fast wiki powered by Node.js and Git.
 
+[View live demo](http://melkor-demo.hiddentao.com/) (resets every hour)
+
 ## Features
 
 * Git back-end storage

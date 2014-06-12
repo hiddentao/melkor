@@ -1,7 +1,7 @@
 {
   "name": "melkor",
   "description": "Simple, fast wiki powered by Node.js and Git",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "author": {
     "name": "Ramesh Nair",
     "email": "ram@hiddentao.com"
