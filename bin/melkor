@@ -1,4 +1,32 @@
-#!/usr/bin/env node --harmony
+#!/usr/bin/env node
+
+
+var es6Enabled = false;
+try {
+  require('vm').runInNewContext('var a = function*() {};');
+  es6Enabled = true;
+} catch (err) {
+  es6Enabled = false;
+}
+
+// enable ES6 if needed
+if (!es6Enabled) {
+  var spawn = require('child_process').spawn;
+
+  var app = spawn('node', ['--harmony', __filename], {
+    cwd: process.cwd(),
+    env: process.env,
+    stdio: 'inherit',
+  });
+
+  app.on('exit', function (code) {
+    process.exit(code);
+  });
+
+  return;
+}
+
+
 var commander = require('commander'),
   melkor = require('../index'),
   co = require('co');
@@ -27,3 +55,4 @@ co(melkor.init)(dataFolder, options, function(err) {
 
   console.log('Melkor (PID: ' + process.pid + ') started in: ' + dataFolder);
 });
+
