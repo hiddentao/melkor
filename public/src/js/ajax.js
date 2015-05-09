@@ -69,7 +69,11 @@ $(function() {
 
     // forms
     $('form', rootElement).ajaxForm({
-      beforeSubmit: showProgressMsg,
+      beforeSubmit: function(arr, $form, options) {
+        var type = $form.data('type');
+
+        showProgressMsg('create' === type ? 'Creating...' : 'Saving...');
+      },
       success: handleAjaxSuccess(),
       error: handleAjaxError
     });
@@ -129,7 +133,8 @@ $(function() {
   }
 
 
-  var showProgressMsg = function() {
+  var showProgressMsg = function(text) {
+    $('#loading .modal-body span').text(text || 'Loading...');
     $('#loading').modal('show');
   };
   

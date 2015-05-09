@@ -11,7 +11,7 @@ mixin fieldError(fieldName)
   .pageBody
     if error
       .alert.alert-danger There were some errors
-    form(role="form", method="post", action=formAction)
+    form(role="form", data-type=formType method="post", action=formAction)
       .form-group
         - var field = form.fields.title
         label(for="page_title") #{field.label}

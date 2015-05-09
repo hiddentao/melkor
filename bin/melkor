@@ -13,7 +13,7 @@ try {
 if (!es6Enabled) {
   var spawn = require('child_process').spawn;
 
-  var app = spawn('node', ['--harmony', __filename], {
+  var app = spawn('node', ['--harmony', __filename].concat(process.argv.slice(2)), {
     cwd: process.cwd(),
     env: process.env,
     stdio: 'inherit',

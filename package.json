@@ -1,7 +1,7 @@
 {
   "name": "melkor",
   "description": "Simple, fast wiki powered by Node.js and Git",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "author": {
     "name": "Ramesh Nair",
     "email": "ram@hiddentao.com"
@@ -55,6 +55,7 @@
   },
   "scripts": {
     "prepublish": "npm prune",
+    "postinstall": "bower install",
     "build": "NODE_ENV=test node --harmony `which grunt`"
   },
   "engines": {
