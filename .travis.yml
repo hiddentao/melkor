@@ -11,10 +11,8 @@ before_script:
   - "git config --global user.email 'you@example.com'"
   - "git config --global user.name 'Your name'"
   - "npm install -g grunt-cli"
-  - "npm install -g grunt-cli"
   - "npm install -g bower"
   - "npm install"
-  - "bower install"
 
 script:
   - "npm run build"
