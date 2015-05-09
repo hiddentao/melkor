@@ -55,7 +55,6 @@
   },
   "scripts": {
     "prepublish": "npm prune",
-    "postinstall": "bower install",
     "build": "NODE_ENV=test node --harmony `which grunt`"
   },
   "engines": {
